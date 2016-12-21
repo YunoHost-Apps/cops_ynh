@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# See comments in install script
+app=$YNH_APP_INSTANCE_NAME
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+final_path=$(ynh_app_setting_get $app final_path)
+path=$(ynh_app_setting_get $app path)
+domain=$(ynh_app_setting_get $app domain)
+is_public=$(ynh_app_setting_get $app is_public)
+finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
+finalphpconf=$(ynh_app_setting_get $app finalphpconf)
+
+
+# Backup sources & data
+# Note: the last argument is where to save this path, see the restore script.
+ynh_backup "$final_path" "sources"
+
+### MySQL (remove if not used) ###
+# If a MySQL database is used:
+# # Dump the database
+# dbname=$app
+# dbuser=$app
+# dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+# mysqldump -u "$dbuser" -p"$dbpass" --no-create-db "$dbname" > ./dump.sql
+### MySQL end ###
+
+# Copy NGINX configuration
+ynh_backup "$finalnginxconf" "nginx.conf"
+
+### PHP (remove if not used) ###
+# If a dedicated php-fpm process is used:
+# # Copy PHP-FPM pool configuration
+ynh_backup "$finalphpconf" "php-fpm.conf"

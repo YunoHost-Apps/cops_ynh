@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Note: each files and directories you've saved using the ynh_backup helper
+# will be located in the current directory, regarding the last argument.
+
+# Exit on command errors and treat unset variables as an error
+set -eu
+
+# See comments in install script
+app=$YNH_APP_INSTANCE_NAME
+
+# Source YunoHost helpers
+source /usr/share/yunohost/helpers
+
+# Retrieve old app settings
+final_path=$(ynh_app_setting_get $app final_path)
+path=$(ynh_app_setting_get $app path)
+sitename=$(ynh_app_setting_get $app sitename)
+domain=$(ynh_app_setting_get $app domain)
+is_public=$(ynh_app_setting_get $app is_public)
+finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
+finalphpconf=$(ynh_app_setting_get $app finalphpconf)
+usergroup=$(ynh_app_setting_get $app usergroup)
+
+# Check domain/path availability
+#sudo yunohost app checkurl "${domain}${path}" -a "$app" \
+#    || ynh_die "Path not available: ${domain}${path}"
+
+# Restore sources & data
+sudo mkdir -p $final_path
+sudo cp -a ./sources/* $final_path/
+
+# Restore permissions to app files
+# you may need to make some file and/or directory writeable by www-data (nginx user)
+sudo chown -R $usergroup $final_path
+
+### MySQL (remove if not used) ###
+# If a MySQL database is used:
+# # Create and restore the database
+# dbname=$app
+# dbuser=$app
+# dbpass=$(ynh_app_setting_get "$app" mysqlpwd)
+# ynh_mysql_create_db "$dbname" "$dbuser" "$dbpass"
+# ynh_mysql_connect_as "$dbuser" "$dbpass" "$dbname" < ./dump.sql
+### MySQL end ###
+
+# Restore NGINX configuration
+sudo cp -a ./nginx.conf $finalnginxconf
+
+### PHP (remove if not used) ###
+# If a dedicated php-fpm process is used:
+# # Copy PHP-FPM pool configuration and reload the service
+sudo cp -a ./php-fpm.conf $finalphpconf
+### PHP end ###
+
+# Make app public if necessary
+is_public=$(ynh_app_setting_get $app is_public)
+if [ "$is_public" = "Yes" ];
+then
+        ynh_app_setting_set $app skipped_uris "/"
+fi
+
+
+# Restart webserver
+sudo service nginx reload
+sudo service php5-fpm reload
+sudo yunohost app ssowatconf
+

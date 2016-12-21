@@ -1,0 +1,40 @@
+#!/bin/bash
+set -eu
+
+# Charge les fonctions génériques habituellement utilisées dans le script
+source fonctions
+
+# Active trap pour arrêter le script si une erreur est détectée.
+TRAP_ON
+
+# Source app helpers
+source /usr/share/yunohost/helpers
+
+# We retrieve app parameters
+app=$YNH_APP_INSTANCE_NAME
+
+# We check variables are not empty
+CHECK_VAR "$app" "app name not set"
+
+path=$(ynh_app_setting_get $app path)
+domain=$(ynh_app_setting_get $app domain)
+final_path=$(ynh_app_setting_get $app final_path)
+sitename=$(ynh_app_setting_get $app sitename)
+finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
+finalphpconf=$(ynh_app_setting_get $app finalphpconf)
+
+# Suppression du dossier de la webapp
+sudo rm -rf $final_path
+
+# Suppression de la config nginx de la webapp
+sudo rm -f $finalnginxconf
+sudo rm -f $finalphpconf
+
+# We remove old files in /var/www/webapp_multi
+sudo rmdir --ignore-fail-on-non-empty /var/www/webapp_multi/$domain
+sudo rmdir --ignore-fail-on-non-empty /var/www/webapp_multi
+
+
+sudo service php5-fpm reload
+sudo service nginx reload
+sudo yunohost app ssowatconf
