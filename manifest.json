@@ -1,0 +1,55 @@
+{
+    "name": "COPS",
+    "id": "webapp_multi_inst",
+    "packaging_format": 1,
+    "description": {
+        "en": "Calibre OPDS (and HTML) PHP Server",
+        "fr": "Calibre OPDS (et HTML) PHP Serveur"
+    },
+    "url": "https://github.com/YunoHost-Apps/cops_ynh",
+    "license": "free",
+    "maintainer": {
+        "name": "polytan02",
+        "email": "polytan02@mcgva.org"
+    },
+    "multi_instance": true,
+    "services": [
+        "nginx",
+        "php5-fpm"
+    ],
+    "requirements": {
+         "yunohost": ">= 2.4.0"
+    },
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "type": "domain",
+                "ask": {
+                    "en": "Choose a domain for your Webapp",
+                    "fr": "Choisissez un domaine pour votre Webapp"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "type": "path",
+                "ask": {
+                    "en": "Choose a path for your Webapp",
+                    "fr": "Choisissez un chemin pour votre Webapp"
+                },
+                "example": "/eBooks",
+                "default": "/eBooks"
+            },
+            {
+                "name": "is_public",
+                "ask": {
+                    "en": "Is it a public website ?",
+                    "fr": "Est-ce un site publique ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            }
+        ]
+    }
+}
