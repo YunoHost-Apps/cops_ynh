@@ -31,8 +31,7 @@ sudo rm -f $finalnginxconf
 sudo rm -f $finalphpconf
 
 # We remove old files in /var/www/webapp_multi
-sudo rmdir --ignore-fail-on-non-empty /var/www/webapp_multi/$domain
-sudo rmdir --ignore-fail-on-non-empty /var/www/webapp_multi
+sudo rm -rf $final_path
 
 
 sudo service php5-fpm reload
