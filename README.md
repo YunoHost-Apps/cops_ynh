@@ -1,6 +1,6 @@
 # COPS : Calibre OPDS (and HTML) PHP Server
 
-* Work in progress
+* Work in progress --- DO NOT USE YET
 
 * Designed to work best with OwnCloud or NextCloud
 
