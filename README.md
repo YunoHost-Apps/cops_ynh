@@ -2,6 +2,6 @@
 
 * Work in progress
 
-* Designed to work best with OwnCloud our NextCloud
+* Designed to work best with OwnCloud or NextCloud
 
 * Creates an OPDS and HTML server based on a Calibre folder stored in Owncloud or NextCloud
