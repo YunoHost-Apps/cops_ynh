@@ -42,6 +42,8 @@ ynh_app_setting_set "$app" finalnginxconf "$finalnginxconf"
 finalphpconf="/etc/php5/fpm/pool.d/${app}.conf"
 ynh_app_setting_set "$app" finalphpconf "$finalphpconf"
 
+# We install dependencies
+sudo apt-get install --quiet php5-gd php5-sqlite php5-json php5-intl
 
 # Creation of folder
 #sudo rm -rf $final_path
