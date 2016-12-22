@@ -77,8 +77,8 @@ then
 	base64);printf "$basicauthuser:{SSHA}$SHA1\n" >> ../sources/htpasswd)
 
 	# Modif nginx
-	sed -i "s|^.*\bauth_basic\b.*$|    auth_basic "Private Library";|" ../conf/nginx.conf;
-	sed -i "s|^.*\bauth_basic_user_file\b.*$|    auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
+	sed -i "s|^.*\bauth_basic\b.*$|       auth_basic \"Private Library\";|" ../conf/nginx.conf;
+	sed -i "s|^.*\bauth_basic_user_file\b.*$|       auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
 else
 	echo "No basic auth";
 fi
