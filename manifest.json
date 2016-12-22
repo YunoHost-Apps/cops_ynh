@@ -68,7 +68,38 @@
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
+            },
+ 	    {
+                "name": "basicauthcreate",
+                "ask": {
+                    "en": "Create a basic auth access ? This is required if the app is public so that ereaders to access the OPDS server, for example",
+                    "fr": "Créer un accès par authentification basique ? Ceci est requis si votre bibliothèque est publique et vous voulez accéder au serveur OPDS avec votre liseuse ou application mobile"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            },
+            {
+                "name": "basciauthuser",
+                "type": "user",
+                "ask": {
+                    "en": "Choose the username to access the OPDS/HTML server (unrelated to YunoHost users)",
+                    "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (non lié utilisateurs YunoHost)",
+		},
+                "example": "Gutenberg",
+                "default": "Gutenberg"
+
+            },
+            {
+                "name": "basicauthpass",
+                "type": "password",
+                "ask": {
+                    "en": "Choose the password to access the OPDS/HTML server",
+                    "fr": "Renseignez le mot de passe pour accéder au serveur OPDS/HTML"
+                },
+		"example": "knowledge is power",
+                "default": "knowledge is power"
             }
+
         ]
     }
 }

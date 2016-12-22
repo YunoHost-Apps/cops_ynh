@@ -17,6 +17,9 @@ path=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 runninguser=$YNH_APP_ARG_RUNNINGUSER
 calibrepath=$YNH_APP_ARG_CALIBREPATH
+basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
+basicauthuser=$YNH_APP_ARG_BASICAUTHUSER
+basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
 
 # We check variables are not empty
 CHECK_VAR "$app" "app name not set"
@@ -55,11 +58,36 @@ sudo mkdir -p $final_path
 sudo cp ../conf/config_local.php ../sources/
 sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
 
+# To be done : make it an if loop
+
+# Add basic auth if requested
+if [ "$basicauthcreate" = "Yes" ];
+then
+	ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
+	ynh_app_setting_set "$app" basicauthuser "$basicauthuser"
+	ynh_app_setting_set "$app" basicauthpass "$basicauthpass"
+
+	# Generation of the htpasswd file according https://www.nginx.com/resources/wiki/community/faq/
+	SALT="$(openssl rand -base64 3)"
+	(SHA1=$(printf "$basicauthpass$SALT" |
+	openssl dgst -binary -sha1 | xxd -ps |
+	sed 's#$#'"`echo -n $SALT | xxd -ps`"'#' |
+	xxd -r -ps |
+	base64);printf "$basicauthuser:{SSHA}$SHA1\n" >> ../sources/htpasswd)
+
+	# Modif nginx
+	sed -i "s|^.*\bauth_basic\b.*$|    auth_basic "Private Library";|" ../conf/nginx.conf;
+	sed -i "s|^.*\bauth_basic_user_file\b.*$|    auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
+else
+	echo "No basic auth";
+fi
+
 # Base site
 sudo cp -a ../sources/* $final_path/
 
 # Set permissions
 sudo chmod 775 -R $final_path
+sudo chmod 600 $final_path/htpasswd
 sudo chown -hR $runninguser:$runninguser $final_path
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
@@ -83,6 +111,7 @@ if [ "$is_public" = "Yes" ];
 then
 	ynh_app_setting_set $app skipped_uris "/"
 fi
+
 
 # Reload Nginx and regenerate SSOwat conf
 sudo service php5-fpm reload

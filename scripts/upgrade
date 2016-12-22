@@ -24,7 +24,28 @@ finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
 runninguser=$(ynh_app_setting_get $app runninguser)
 calibrepath=$(ynh_app_setting_get $app calibrepath)
+basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
+# Add basic auth if requested
+if [ "$basicauthcreate" = "Yes" ];
+then
+	basicauthuser=$(ynh_app_setting_get $app basicauthuser)
+	basicauthpass=$(ynh_app_setting_get $app basicauthpass)
+
+        # Generation of the htpasswd file according https://www.nginx.com/resources/wiki/community/faq/
+        SALT="$(openssl rand -base64 3)"
+        (SHA1=$(printf "$basicauthpass$SALT" |
+        openssl dgst -binary -sha1 | xxd -ps |
+        sed 's#$#'"`echo -n $SALT | xxd -ps`"'#' |
+        xxd -r -ps |
+        base64);printf "$basicauthuser:{SSHA}$SHA1\n" >> ../sources/htpasswd)
+
+        # Modif nginx
+        sed -i "s|^.*\bauth_basic\b.*$|    auth_basic "Private Library";|" ../conf/nginx.conf;
+        sed -i "s|^.*\bauth_basic_user_file\b.*$|    auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
+else
+        echo "No basic auth";
+fi
 
 
 # We install dependencies
@@ -58,6 +79,14 @@ sudo cp -a ../sources/* $final_path/
 
 # We adjust permissions
 sudo chmod 775 -R $final_path
+
+if [ "$basicauthcreate" = "Yes" ];
+then
+        sudo chmod 600 $final_path/htpasswd
+else
+        echo "Nothing to do"
+fi
+
 sudo chown -hR $runninguser:$runninguser $final_path
 
 
