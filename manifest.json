@@ -1,6 +1,6 @@
 {
     "name": "COPS",
-    "id": "webapp_multi_inst",
+    "id": "cops",
     "packaging_format": 1,
     "description": {
         "en": "Calibre OPDS (and HTML) PHP Server",
