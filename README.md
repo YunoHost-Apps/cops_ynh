@@ -7,5 +7,5 @@
 * Creates an OPDS and HTML server based on a Calibre folder stored in Owncloud or NextCloud
 
 * Sources used:
-** http://blog.slucas.fr/fr/oss/calibre-opds-php-server
-** Packaged version : 1.0.1
+</br>http://blog.slucas.fr/fr/oss/calibre-opds-php-server
+</br>Packaged version : 1.0.1
