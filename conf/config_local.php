@@ -24,7 +24,7 @@
 
     $config['cops_recentbooks_limit'] = '10';
 
-    $config['default_timezone'] = "Europe/London";
+    $config['default_timezone'] = "TIMEZONETOCHANGE";
 
     $config['cops_template'] = 'default';
 
