@@ -1,14 +1,7 @@
 <?php
     if (!isset($config))
         $config = array();
-
-    /*
-     ***************************************************
-     * Please read config_default.php for all possible
-     * configuration items
-     ***************************************************
-     */
-
+  
     /*
      * The directory containing calibre's metadata.db file, with sub-directories
      * containing all the formats.

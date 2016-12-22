@@ -8,9 +8,8 @@
 var templatePage, templateBookDetail, templateMain, templateSuggestion, currentData, before, filterList;
 
 if (typeof LRUCache != 'undefined') {
-    console.log('ERROR: LRUCache module not loaded!');
+    var cache = new LRUCache(30);
 }
-var cache = new LRUCache(30);
 
 $.ajaxSetup({
     cache: false
@@ -36,7 +35,7 @@ copsTypeahead.initialize();
 var DEBUG = false;
 var isPushStateEnabled = window.history && window.history.pushState && window.history.replaceState &&
   // pushState isn't reliable on iOS until 5.
-  !window.navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]|WebApps\/.+CFNetwork)/);
+  !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]|WebApps\/.+CFNetwork)/);
 
 function debug_log(text) {
     if ( DEBUG ) {
@@ -126,7 +125,8 @@ function str_format () {
 }
 
 function isDefined(x) {
-    return (typeof x !== 'undefined');
+    var undefinedVar;
+    return x !== undefinedVar;
 }
 
 function getCurrentOption (option) {
@@ -161,9 +161,6 @@ function getTagList () {
 
         var tagarray = taglist.split (",");
         for (var i in tagarray) {
-            if (!tagarray.hasOwnProperty(i)) {
-                continue;
-            }
             var tag = tagarray [i].replace(/^\s+/g,'').replace(/\s+$/g,'');
             tagList [tag] = 1;
         }
@@ -186,9 +183,6 @@ function updateFilters () {
 
     // Update the filter -1 to remove, 1 to add, 0 already there
     for (var tag in tagList) {
-        if (!tagList.hasOwnProperty(tag)) {
-            continue;
-        }
         var tagValue = tagList [tag];
         if (tagValue === -1) {
             $("#filter ul li").filter (function () { return $.text([this]) === tag; }).remove();
@@ -217,9 +211,6 @@ function doFilter () {
         var taglist = ", " + $(this).text() + ", ";
         var toBeFiltered = false;
         for (var filter in filterList) {
-            if (!filterList.hasOwnProperty(filter)) {
-                continue;
-            }
             var onlyThisTag = filterList [filter];
             filter = ', ' + filter + ', ';
             var myreg = new RegExp (filter);
@@ -239,10 +230,7 @@ function doFilter () {
     // Handle the books with no tags
     var atLeastOneTagSelected = false;
     for (var filter in filterList) {
-        if (!filterList.hasOwnProperty(filter)) {
-            continue;
-        }
-        if (filterList[filter] === true) {
+        if (filterList [filter] === true) {
             atLeastOneTagSelected = true;
         }
     }
@@ -353,11 +341,11 @@ navigateTo = function (url) {
     var jsonurl = url.replace ("index", "getJSON");
     var cachedData = cache.get (jsonurl);
     if (cachedData) {
-        window.history.pushState(jsonurl, "", url);
+        history.pushState(jsonurl, "", url);
         updatePage (cachedData);
     } else {
         $.getJSON(jsonurl, function(data) {
-            window.history.pushState(jsonurl, "", url);
+            history.pushState(jsonurl, "", url);
             cache.put (jsonurl, data);
             updatePage (data);
         });
@@ -504,7 +492,7 @@ function initiateAjax (url, theme) {
         updatePage (data [0]);
         cache.put (url, data [0]);
         if (isPushStateEnabled) {
-            window.history.replaceState(url, "", window.location);
+            history.replaceState(url, "", window.location);
         }
         handleLinks ();
     });
