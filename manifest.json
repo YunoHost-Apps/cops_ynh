@@ -80,7 +80,6 @@
             },
             {
                 "name": "basciauthuser",
-                "type": "user",
                 "ask": {
                     "en": "Choose the username to access the OPDS/HTML server (unrelated to YunoHost users)",
                     "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (non lié utilisateurs YunoHost)"
