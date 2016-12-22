@@ -27,7 +27,7 @@ runninguser=$(ynh_app_setting_get $app runninguser)
 #    || ynh_die "Path not available: ${domain}${path}"
 
 # We install dependencies
-sudo apt-get install --quiet php5-gd php5-sqlite php5-json php5-intl
+sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-intl
 
 # Restore sources & data
 sudo mkdir -p $final_path

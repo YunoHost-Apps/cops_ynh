@@ -25,7 +25,7 @@ finalphpconf=$(ynh_app_setting_get $app finalphpconf)
 runninguser=$(ynh_app_setting_get $app runninguser)
 
 # We install dependencies
-sudo apt-get install --quiet php5-gd php5-sqlite php5-json php5-intl
+sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-intl
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
