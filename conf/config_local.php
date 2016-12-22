@@ -21,3 +21,14 @@
      *  0 : disable
      */
     $config['cops_use_url_rewriting'] = "0";
+
+    $config['cops_recentbooks_limit'] = '10';
+
+    $config['default_timezone'] = "Europe/London";
+
+    $config['cops_template'] = 'default';
+
+    $config['cops_style'] = 'iphone';
+
+
+
