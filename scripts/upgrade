@@ -25,6 +25,9 @@ runninguser=$(ynh_app_setting_get $app runninguser)
 calibrepath=$(ynh_app_setting_get $app calibrepath)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
+# We check that calibrepath is correct
+CHECK_CALIBREPATH
+
 # Add basic auth if requested
 if [ "$basicauthcreate" = "Yes" ];
 then

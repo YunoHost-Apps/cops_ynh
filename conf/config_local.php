@@ -1,19 +1,19 @@
 <?php
     if (!isset($config))
         $config = array();
-  
+
     /*
      * The directory containing calibre's metadata.db file, with sub-directories
      * containing all the formats.
      * BEWARE : it has to end with a /
      */
-    $config['calibre_directory'] = 'CALIBRETOCHANGE';
-    
+    $config['calibre_directory'] = 'CALIBRETOCHANGE/';
+
     /*
      * Catalog's title
      */
     $config['cops_title_default'] = "COPS";
-    
+
     /*
      * use URL rewriting for downloading of ebook in HTML catalog
      * See README for more information

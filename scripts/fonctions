@@ -44,6 +44,15 @@ CHECK_PATH () {	# Vérifie la présence du / en début de path. Et son absence �
 	fi
 }
 
+CHECK_CALIBREPATH () {	# Vérifie la présence du / en début de path. Et son absence à la fin.
+	if [ "${calibrepath:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
+		path="/$calibrepath"    # Ajoute un / en début de path
+	fi
+	if [ "${calibrepath:${#calibrepath}-1}" == "/" ] && [ ${#calibrepath} -gt 1 ]; then    # Si le dernier caractère est un / et que ce n'est pas le seul caractère.
+		path="${calibrepath:0:${#calibrepath}-1}"	# Supprime le dernier caractère
+	fi
+}
+
 CHECK_DOMAINPATH () {	# Vérifie la disponibilité du path et du domaine.
 	sudo yunohost app checkurl $domain$path -a $app
 }

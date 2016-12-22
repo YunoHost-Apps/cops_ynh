@@ -54,11 +54,11 @@
                 "name": "calibrepath",
                 "type": "path",
                 "ask": {
-                    "en": "Indicate the location of Calibre library. It MUST end with a / and DON'T store it in your /var/www/cops !!",
-                    "fr": "Indiquez le chemin de votre bibliotheque Calibre. Cela DOIT se terminer par un / et ne la mettez pas dans /var/www/cops !!!"
+                    "en": "Indicate the location of Calibre library. DON'T store it in your /var/www/cops or it will be removed on next upgrade !!",
+                    "fr": "Indiquez le chemin de votre bibliotheque Calibre. Ne la mettez pas dans /var/www/cops ou elle sera supprimée à la prochaine upgrade !!!"
                 },
-                "example": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks/",
-                "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks/"
+                "example": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks",
+                "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks"
             },
             {
                 "name": "is_public",
