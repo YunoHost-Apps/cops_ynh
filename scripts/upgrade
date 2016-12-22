@@ -42,6 +42,12 @@ sudo cp ../conf/php-fpm.conf $finalphpconf
 sudo chown root: $finalphpconf
 sudo chmod 644 $finalphpconf
 
+# Removal of old folder and restart from fresh
+sudo rm -rf $final_path
+sudo mkdir -p $final_path
+
+# Base site
+sudo cp -a ../sources/* $final_path/
 
 # We adjust permissions
 sudo chmod 775 -R $final_path

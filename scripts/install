@@ -50,9 +50,11 @@ sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-int
 sudo mkdir -p $final_path
 
 # Base site
+sudo cp -a ../sources/* $final_path/
+
+# Site adjustments
 #sed -i "s@DOMAINTOCHANGE@$domain@g" ../sources/index.html
 #sed -i "s@SITETOCHANGE@$sitename@g" ../sources/index.html
-#sudo cp ../sources/* $final_path/
 
 # Set permissions
 sudo chmod 775 -R $final_path
