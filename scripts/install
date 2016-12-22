@@ -60,7 +60,7 @@ sudo mkdir -p $final_path
 sudo cp ../conf/config_local.php ../sources/
 sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
 timezone=`sudo cat /etc/timezone`;
-sed -i "s@TIMEZONETOCHANGE@$calibrepath@g" ../sources/config_local.php
+sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../sources/config_local.php
 
 
 # To be done : make it an if loop
