@@ -64,7 +64,7 @@ sudo cp ../conf/nginx.conf $finalnginxconf
 
 
 sed -i "s@NAMETOCHANGE@$app@g" ../conf/php-fpm.conf
-sed -i "s@FOLDERTOCHANGE@$finalpath@g" ../conf/php-fpm.conf
+sed -i "s@FOLDERTOCHANGE@$final_path@g" ../conf/php-fpm.conf
 sed -i "s@USERTOCHANGE@$usergroup@g" ../conf/php-fpm.conf
 
 sudo cp ../conf/php-fpm.conf $finalphpconf
