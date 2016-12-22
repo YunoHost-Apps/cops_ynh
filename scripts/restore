@@ -15,7 +15,6 @@ source /usr/share/yunohost/helpers
 # Retrieve old app settings
 final_path=$(ynh_app_setting_get $app final_path)
 path=$(ynh_app_setting_get $app path)
-sitename=$(ynh_app_setting_get $app sitename)
 domain=$(ynh_app_setting_get $app domain)
 is_public=$(ynh_app_setting_get $app is_public)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)

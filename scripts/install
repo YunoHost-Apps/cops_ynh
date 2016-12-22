@@ -36,10 +36,12 @@ final_path=/var/www/$app
 
 # Define variables and Save app settings
 ynh_app_setting_set "$app" domain "$domain"
+ynh_app_setting_set "$app" path "$path"
 ynh_app_setting_set "$app" is_public "$is_public"
 ynh_app_setting_set "$app" final_path "$final_path"
 ynh_app_setting_set "$app" runninguser "$runninguser"
 ynh_app_setting_set "$app" calibrepath "$calibrepath"
+ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
 
 finalnginxconf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 ynh_app_setting_set "$app" finalnginxconf "$finalnginxconf"
@@ -63,7 +65,6 @@ sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
 # Add basic auth if requested
 if [ "$basicauthcreate" = "Yes" ];
 then
-	ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
 	ynh_app_setting_set "$app" basicauthuser "$basicauthuser"
 	ynh_app_setting_set "$app" basicauthpass "$basicauthpass"
 
