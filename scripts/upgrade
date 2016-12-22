@@ -78,15 +78,15 @@ sudo cp -a ../sources/* $final_path/
 
 # We adjust permissions
 sudo chmod 775 -R $final_path
+sudo chown -hR $runninguser:$runninguser $final_path
 
 if [ "$basicauthcreate" = "Yes" ];
 then
-        sudo chmod 600 $final_path/htpasswd
+        sudo chmod 440 $final_path/htpasswd
+        sudo chown www-data:www-data $final_path/htpasswd
 else
         echo "Nothing to do"
 fi
-
-sudo chown -hR $runninguser:$runninguser $final_path
 
 
 # Make app public if necessary

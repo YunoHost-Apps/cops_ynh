@@ -36,14 +36,14 @@ sudo cp -a ./sources/* $final_path/
 # Restore permissions to app files
 # you may need to make some file and/or directory writeable by www-data (nginx user)
 sudo chown -R $runninguser:$runninguser $final_path
+
 if [ "$basicauthcreate" = "Yes" ];
 then
-        sudo chmod 600 $final_path/htpasswd
+        sudo chmod 440 $final_path/htpasswd
+        sudo chown www-data:www-data $final_path/htpasswd
 else
         echo "Nothing to do"
 fi
-
-
 
 ### MySQL (remove if not used) ###
 # If a MySQL database is used:
