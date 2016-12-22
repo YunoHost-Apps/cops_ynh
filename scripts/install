@@ -15,7 +15,7 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$YNH_APP_ARG_DOMAIN
 path=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
-usergroup="owncloud:owncloud"
+runninguser="owncloud"
 
 # We check variables are not empty
 CHECK_VAR "$app" "app name not set"
@@ -31,7 +31,7 @@ CHECK_FINALPATH
 final_path=/var/www/$app
 
 # Define variables and Save app settings
-ynh_app_setting_set "$app" usergroup "$usergroup"
+ynh_app_setting_set "$app" runninguser "$runninguser"
 ynh_app_setting_set "$app" domain "$domain"
 ynh_app_setting_set "$app" is_public "$is_public"
 ynh_app_setting_set "$app" final_path "$final_path"
@@ -54,7 +54,7 @@ sudo mkdir -p $final_path
 
 # Set permissions
 sudo chmod 775 -R $final_path
-sudo chown -hR $usergroup $final_path
+sudo chown -hR $runninguser:$runninguser $final_path
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
@@ -65,7 +65,7 @@ sudo cp ../conf/nginx.conf $finalnginxconf
 
 sed -i "s@NAMETOCHANGE@$app@g" ../conf/php-fpm.conf
 sed -i "s@FOLDERTOCHANGE@$final_path@g" ../conf/php-fpm.conf
-sed -i "s@USERTOCHANGE@$usergroup@g" ../conf/php-fpm.conf
+sed -i "s@USERTOCHANGE@$runninguser@g" ../conf/php-fpm.conf
 
 sudo cp ../conf/php-fpm.conf $finalphpconf
 sudo chown root: $finalphpconf

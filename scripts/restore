@@ -20,7 +20,7 @@ domain=$(ynh_app_setting_get $app domain)
 is_public=$(ynh_app_setting_get $app is_public)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
-usergroup=$(ynh_app_setting_get $app usergroup)
+runninguser=$(ynh_app_setting_get $app runninguser)
 
 # Check domain/path availability
 #sudo yunohost app checkurl "${domain}${path}" -a "$app" \
@@ -32,7 +32,7 @@ sudo cp -a ./sources/* $final_path/
 
 # Restore permissions to app files
 # you may need to make some file and/or directory writeable by www-data (nginx user)
-sudo chown -R $usergroup $final_path
+sudo chown -R $runninguser:$runninguser $final_path
 
 ### MySQL (remove if not used) ###
 # If a MySQL database is used:

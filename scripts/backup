@@ -15,7 +15,7 @@ domain=$(ynh_app_setting_get $app domain)
 is_public=$(ynh_app_setting_get $app is_public)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
-
+runninguser=$(ynh_app_setting_get $app runninguser)
 
 # Backup sources & data
 # Note: the last argument is where to save this path, see the restore script.
