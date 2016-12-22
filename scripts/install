@@ -87,7 +87,14 @@ sudo cp -a ../sources/* $final_path/
 
 # Set permissions
 sudo chmod 775 -R $final_path
-sudo chmod 600 $final_path/htpasswd
+
+if [ "$basicauthcreate" = "Yes" ];
+then
+	sudo chmod 600 $final_path/htpasswd
+else
+	echo "Nothing to do"
+fi
+
 sudo chown -hR $runninguser:$runninguser $final_path
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
