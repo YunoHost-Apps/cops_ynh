@@ -15,7 +15,8 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$YNH_APP_ARG_DOMAIN
 path=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
-runninguser="owncloud"
+runninguser=$YNH_APP_ARG_RUNNINGUSER
+calibrepath=$YNH_APP_ARG_CALIBREPATH
 
 # We check variables are not empty
 CHECK_VAR "$app" "app name not set"
@@ -31,10 +32,11 @@ CHECK_FINALPATH
 final_path=/var/www/$app
 
 # Define variables and Save app settings
-ynh_app_setting_set "$app" runninguser "$runninguser"
 ynh_app_setting_set "$app" domain "$domain"
 ynh_app_setting_set "$app" is_public "$is_public"
 ynh_app_setting_set "$app" final_path "$final_path"
+ynh_app_setting_set "$app" runninguser "$runninguser"
+ynh_app_setting_set "$app" calibrepath "$calibrepath"
 
 finalnginxconf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 ynh_app_setting_set "$app" finalnginxconf "$finalnginxconf"
@@ -49,12 +51,12 @@ sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-int
 #sudo rm -rf $final_path
 sudo mkdir -p $final_path
 
+# Site adjustments
+sudo cp ../conf/config_local.php ../sources/
+sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
+
 # Base site
 sudo cp -a ../sources/* $final_path/
-
-# Site adjustments
-#sed -i "s@DOMAINTOCHANGE@$domain@g" ../sources/index.html
-#sed -i "s@SITETOCHANGE@$sitename@g" ../sources/index.html
 
 # Set permissions
 sudo chmod 775 -R $final_path

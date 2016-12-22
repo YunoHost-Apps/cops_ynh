@@ -42,6 +42,25 @@
                 "default": "/eBooks"
             },
             {
+                "name": "runninguser",
+                "ask": {
+                    "en": "Under which system user should COPS run ?",
+                    "fr": "Sous quel utilisateur systeme COPS doit-il fonctionner ?"
+                },
+                "choices": ["owncloud", "nextcloud", "www-data"],
+                "default": "owncloud"
+            },
+            {
+                "name": "calibrepath",
+                "type": "path",
+                "ask": {
+                    "en": "Indicate the location of Calibre library. It MUST end with a / and DON'T store it in your /var/www/cops !!",
+                    "fr": "Indiquez le chemin de votre bibliotheque Calibre. Cela DOIT se terminer par un / et ne la mettez pas dans /var/www/cops !!!"
+                },
+                "example": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks/",
+                "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks/"
+            },
+            {
                 "name": "is_public",
                 "ask": {
                     "en": "Is it a public website ?",
