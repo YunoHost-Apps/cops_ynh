@@ -60,10 +60,9 @@ sudo mkdir -p $final_path
 
 # We download the sources and check the md5sum
 cops_file=`sudo cat ../sources/source_file`;
-sudo wget -nv -i ../sources/source_url
+sudo wget -nv -i ../sources/source_url -O $cops_file
 sudo md5sum -c ../sources/source_md5 --status || (echo "Corrupt source" >&2 && false)
 sudo unzip ${cops_file} -d $final_path
-sudo rm -f ${cops_file}
 
 # Site adjustments
 sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../conf/config_local.php
