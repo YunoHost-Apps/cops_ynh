@@ -47,8 +47,8 @@
                     "en": "Under which system user should COPS run ?",
                     "fr": "Sous quel utilisateur systeme COPS doit-il fonctionner ?"
                 },
-                "choices": ["owncloud", "nextcloud", "www-data"],
-                "default": "owncloud"
+                "choices": ["www-data", "owncloud", "nextcloud"],
+                "default": "www-data"
             },
             {
                 "name": "calibrepath",
