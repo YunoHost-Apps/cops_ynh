@@ -38,17 +38,8 @@
                     "en": "Choose a path to access your COPS library",
                     "fr": "Choisissez un chemin pour acceder a votre bibliotheque COPS"
                 },
-                "example": "/eBooks",
-                "default": "/eBooks"
-            },
-            {
-                "name": "runninguser",
-                "ask": {
-                    "en": "Under which system user should COPS run ?",
-                    "fr": "Sous quel utilisateur systeme COPS doit-il fonctionner ?"
-                },
-                "choices": ["www-data", "owncloud", "nextcloud"],
-                "default": "www-data"
+                "example": "/cops",
+                "default": "/cops"
             },
             {
                 "name": "calibrepath",
@@ -58,6 +49,15 @@
                 },
                 "example": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks",
                 "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks"
+            },
+            {
+                "name": "runninguser",
+                "ask": {
+                    "en": "Which system user is managing the Calibre folder ?",
+                    "fr": "Quel utilisateur systeme gere le dossier Calibre ?"
+                },
+                "choices": ["www-data", "owncloud", "nextcloud"],
+                "default": "www-data"
             },
             {
                 "name": "is_public",
@@ -85,7 +85,6 @@
 		},
                 "example": "Gutenberg",
                 "default": "Gutenberg"
-
             },
             {
                 "name": "basicauthpass",
@@ -97,7 +96,6 @@
 		"example": "knowledge is power",
                 "default": "knowledge is power"
             }
-
         ]
     }
 }
