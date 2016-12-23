@@ -22,11 +22,20 @@ final_path=$(ynh_app_setting_get $app final_path)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
 runninguser=$(ynh_app_setting_get $app runninguser)
-calibrepath=$(ynh_app_setting_get $app calibrepath)
+calibre=$(ynh_app_setting_get $app calibre)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
-# We check that calibrepath is correct
-CHECK_CALIBREPATH
+# We check that calibre path is correct
+CHECK_CALIBRE () {  # Vérifie la présence du / en début de path. Et son absence à la fin.
+        if [ "${calibre:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
+                calibre="/$calibre"    # Ajoute un / en début de path
+        fi
+        if [ "${calibre:${#calibre}-1}" == "/" ] && [ ${#calibre} -gt 1 ]; then    # Si le dernier caractère est un / $
+                calibre="${calibre:0:${#calibre}-1}"        # Supprime le dernier caractère
+        fi
+}
+
+CHECK_CALIBRE
 
 # We install dependencies
 sudo apt-get update -y

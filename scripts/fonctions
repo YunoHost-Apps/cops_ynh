@@ -6,28 +6,29 @@ CHECK_VAR () {	# Vérifie que la variable n'est pas vide.
 	test -n "$1" || (echo "$2" >&2 && false)
 }
 
-#EXIT_PROPERLY () {	# Provoque l'arrêt du script en cas d'erreur. Et nettoye les résidus.
-#	trap '' ERR
-#	echo -e "\e[91m \e[1m"	# Shell in light red bold
-#	echo -e "!!\n  $app install's script has encountered an error. Installation was cancelled.\n!!" >&2
-#
-#	CLEAN_SETUP	# Appel la fonction de nettoyage spécifique du script install.
-#
-#	# Compense le bug de ssowat qui ne supprime pas l'entrée de l'app en cas d'erreur d'installation.
-#	sudo sed -i "\@\"$domain$path/\":@d" /etc/ssowat/conf.json
-#
-#	ynh_ die
-#}
+EXIT_PROPERLY () {	# Provoque l'arrêt du script en cas d'erreur. Et nettoye les résidus.
+	exit_code=$?
+	if [ "$exit_code" -eq 0 ]; then
+			exit 0	# Quitte sans erreur si le script se termine correctement.
+	fi
+	trap '' EXIT
+	set +eu
+	echo -e "\e[91m \e[1m"	# Shell in light red bold
+	echo -e "!!\n  $app install's script has encountered an error. Installation was cancelled.\n!!" >&2
 
-TRAP_ON () {	# Activate signal capture
-	trap EXIT_PROPERLY ERR	# Capturing ex it signals on error
+	if type -t CLEAN_SETUP > /dev/null; then	# Vérifie l'existance de la fonction avant de l'exécuter.
+		CLEAN_SETUP	# Appel la fonction de nettoyage spécifique du script install.
+	fi
+
+	# Compense le bug de ssowat qui ne supprime pas l'entrée de l'app en cas d'erreur d'installation.
+	sudo sed -i "\@\"$domain$path/\":@d" /etc/ssowat/conf.json
+
+	ynh_die
 }
 
-TRAP_OFF () {	# Ignoring signal capture until TRAP_ON
-	# Pour une raison que j'ignore, la fonction TRAP_ON fonctionne très bien.
-	# Mais pas la fonction TRAP_OFF...
-	# Utiliser directement `trap '' ERR` dans le code pour l'utiliser, à la place de la fonction.
-	trap '' ERR	# Ignoring ex it signals
+TRAP_ON () {	# Activate signal capture
+	set -eu	# Exit if a command fail, and if a variable is used unset.
+	trap EXIT_PROPERLY EXIT	# Capturing exit signals on shell script
 }
 
 CHECK_USER () {	# Vérifie la validité de l'user admin
@@ -41,15 +42,6 @@ CHECK_PATH () {	# Vérifie la présence du / en début de path. Et son absence �
 	fi
 	if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then    # Si le dernier caractère est un / et que ce n'est pas le seul caractère.
 		path="${path:0:${#path}-1}"	# Supprime le dernier caractère
-	fi
-}
-
-CHECK_CALIBREPATH () {	# Vérifie la présence du / en début de path. Et son absence à la fin.
-	if [ "${calibrepath:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
-		calibrepath="/$calibrepath"    # Ajoute un / en début de path
-	fi
-	if [ "${calibrepath:${#calibrepath}-1}" == "/" ] && [ ${#calibrepath} -gt 1 ]; then    # Si le dernier caractère est un / et que ce n'est pas le seul caractère.
-		calibrepath="${calibrepath:0:${#calibrepath}-1}"	# Supprime le dernier caractère
 	fi
 }
 
@@ -69,13 +61,14 @@ CHECK_FINALPATH () {	# Vérifie que le dossier de destination n'est pas déjà u
 GENERATE_DB () {	# Créer une base de données et un utilisateur dédié au nom de l'app.
 # $1 = Nom de la base de donnée
 	db_user=$1
+	db_user=${db_user//-/_}	# mariadb ne supporte pas les - dans les noms de base de données. Ils sont donc remplacé par des _
 	# Génère un mot de passe aléatoire.
 # 	db_pwd=$(head -n20 /dev/urandom | tr -c -d 'A-Za-z0-9' | head -c20)
 	db_pwd=$(ynh_string_random)
 	CHECK_VAR "$db_pwd" "db_pwd empty"
 	# Utilise '$app' comme nom d'utilisateur et de base de donnée
 	# Initialise la base de donnée et stocke le mot de passe mysql.
-	ynh_mysql_create_db $db_user $db_user $db_pwd
+	ynh_mysql_create_db "$db_user" "$db_user" $db_pwd
 	ynh_app_setting_set $app mysqlpwd $db_pwd
 }
 

@@ -16,7 +16,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 runninguser=$YNH_APP_ARG_RUNNINGUSER
-calibrepath=$YNH_APP_ARG_CALIBREPATH
+calibre=$YNH_APP_ARG_CALIBRE
 basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
 basicauthuser=$YNH_APP_ARG_BASICAUTHUSER
 basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
@@ -31,7 +31,17 @@ CHECK_DOMAINPATH
 # Check destination folder is not used already
 CHECK_FINALPATH
 
-CHECK_CALIBREPATH;
+# We check that calibre path is correct
+CHECK_CALIBRE () {  # Vérifie la présence du / en début de path. Et son absence à la fin.
+        if [ "${calibre:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
+                calibre="/$calibre"    # Ajoute un / en début de path
+        fi
+        if [ "${calibre:${#calibre}-1}" == "/" ] && [ ${#calibre} -gt 1 ]; then    # Si le dernier caractère est un / $
+                calibre="${calibre:0:${#calibre}-1}"        # Supprime le dernier caractère
+        fi
+}
+
+CHECK_CALIBRE;
 
 final_path=/var/www/$app
 
@@ -41,7 +51,7 @@ ynh_app_setting_set "$app" domain "$domain"
 ynh_app_setting_set "$app" is_public "$is_public"
 ynh_app_setting_set "$app" final_path "$final_path"
 ynh_app_setting_set "$app" runninguser "$runninguser"
-ynh_app_setting_set "$app" calibrepath "$calibrepath"
+ynh_app_setting_set "$app" calibre "$calibre"
 ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
 
 finalnginxconf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
@@ -64,7 +74,7 @@ sudo md5sum -c ../sources/source_md5 --status || (echo "Corrupt source" >&2 && f
 sudo unzip ${cops_file} -d $final_path
 
 # Site adjustments
-sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../conf/config_local.php
+sed -i "s@CALIBRETOCHANGE@$calibre@g" ../conf/config_local.php
 timezone=`sudo cat /etc/timezone`;
 sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../conf/config_local.php
 
