@@ -26,17 +26,17 @@
                 "name": "domain",
                 "type": "domain",
                 "ask": {
-                    "en": "Choose a domain for your Webapp",
-                    "fr": "Choisissez un domaine pour votre Webapp"
+                    "en": "Choose a domain for COPS library",
+                    "fr": "Choisissez un domaine pour votre bibliotheque COPS"
                 },
-                "example": "domain.org"
+                "example": "domain.tld"
             },
             {
                 "name": "path",
                 "type": "path",
                 "ask": {
-                    "en": "Choose a path for your Webapp",
-                    "fr": "Choisissez un chemin pour votre Webapp"
+                    "en": "Choose a path to access your COPS library",
+                    "fr": "Choisissez un chemin pour acceder a votre bibliotheque COPS"
                 },
                 "example": "/eBooks",
                 "default": "/eBooks"
