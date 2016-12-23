@@ -26,6 +26,7 @@ CHECK_VAR "$app" "app name not set"
 
 # Check the path value and correct it (adds / at begining and removes it at the end)
 CHECK_PATH
+
 CHECK_CALIBREPATH
 
 # Check domain and path availibility
