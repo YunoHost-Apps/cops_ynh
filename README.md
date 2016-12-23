@@ -1,6 +1,6 @@
 # COPS : Calibre OPDS (and HTML) PHP Server
 
-* You need to indicate the true path of your calibre library and end the path with an /
+* You need to indicate the true path of your calibre library and make sure COPS runs under the same user as were the files are located 
 
 * Designed to work best with OwnCloud or NextCloud
 
