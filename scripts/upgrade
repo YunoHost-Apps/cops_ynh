@@ -78,6 +78,8 @@ sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
 timezone=`sudo cat /etc/timezone`;
 sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../sources/config_local.php
 
+sudo cp ../conf/robots.txt ../sources/
+
 # Base site
 sudo cp -a ../sources/* $final_path/
 
