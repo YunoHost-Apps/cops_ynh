@@ -54,7 +54,7 @@
                 "name": "runninguser",
                 "ask": {
                     "en": "Which system user is managing the Calibre folder ?",
-                    "fr": "Quel utilisateur systeme gere le dossier Calibre ?"
+                    "fr": "Quel utilisateur système gère le dossier Calibre ?"
                 },
                 "choices": ["www-data", "owncloud", "nextcloud"],
                 "default": "www-data"
@@ -72,7 +72,7 @@
                 "name": "basicauthcreate",
                 "ask": {
                     "en": "Create a basic auth access ? This is required if the app is public so that ereaders to access the OPDS server, for example",
-                    "fr": "Créer un accès par authentification basique ? Ceci est requis si votre bibliothèque est publique et vous voulez accéder au serveur OPDS avec votre liseuse ou application mobile"
+                    "fr": "Créer un accès par authentification basique ? Ceci est requis si votre bibliothèque est publique et que vous voulez accéder au serveur OPDS avec votre liseuse ou application mobile"
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
@@ -81,7 +81,7 @@
                 "name": "basicauthuser",
                 "ask": {
                     "en": "Choose the username to access the OPDS/HTML server (unrelated to YunoHost users)",
-                    "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (non lié utilisateurs YunoHost)"
+                    "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (NON lié lié aux utilisateurs YunoHost)"
 		},
                 "example": "Gutenberg",
                 "default": "Gutenberg"
