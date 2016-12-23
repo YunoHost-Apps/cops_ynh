@@ -29,10 +29,7 @@ sudo rm -rf $final_path
 sudo rm -f $finalnginxconf
 sudo rm -f $finalphpconf
 
-# We remove old files in /var/www/webapp_multi
-sudo rm -rf $final_path
-
-
+# We reload the services
 sudo service php5-fpm reload
 sudo service nginx reload
 sudo yunohost app ssowatconf
