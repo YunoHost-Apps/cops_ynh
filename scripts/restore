@@ -29,10 +29,6 @@ finalphpconf=$(ynh_app_setting_get $app finalphpconf)
 runninguser=$(ynh_app_setting_get $app runninguser)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
-# Check domain/path availability
-#sudo yunohost app checkurl "${domain}${path}" -a "$app" \
-#    || ynh_die "Path not available: ${domain}${path}"
-
 # We install dependencies
 sudo apt-get update -y
 sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
