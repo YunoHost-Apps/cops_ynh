@@ -1,11 +1,11 @@
 #!/bin/bash
-set -eu
+#set -eu
 
 # Charge les fonctions génériques habituellement utilisées dans le script
 source fonctions
 
 # Active trap pour arrêter le script si une erreur est détectée.
-TRAP_ON
+#TRAP_ON
 
 # Source app helpers
 source /usr/share/yunohost/helpers
@@ -28,6 +28,32 @@ basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 # We check that calibrepath is correct
 CHECK_CALIBREPATH
 
+# We install dependencies
+sudo apt-get update -y
+sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
+
+# Removal of old folder and restart from fresh
+sudo rm -rf $final_path
+sudo mkdir -p $final_path
+
+# We download the sources and check the md5sum
+cops_file=`sudo cat ../sources/source_file`;
+sudo wget -nv -i ../sources/source_url -P ../sources/
+sudo md5sum -c ../sources/source_md5 --status || (echo "Corrupt source" >&2 && false)
+sudo unzip ../sources/${cops_file} -d $final_path
+
+# Site adjustments
+sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../conf/config_local.php
+timezone=`sudo cat /etc/timezone`;
+sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../conf/config_local.php
+
+sudo cp ../conf/config_local.php $final_path
+sudo cp ../conf/robots.txt $final_path
+
+# Set permissions
+sudo chmod 775 -R $final_path
+sudo chown -hR $runninguser:$runninguser $final_path
+
 # Add basic auth if requested
 if [ "$basicauthcreate" = "Yes" ];
 then
@@ -41,61 +67,30 @@ then
         sed 's#$#'"`echo -n $SALT | xxd -ps`"'#' |
         xxd -r -ps |
         base64);printf "$basicauthuser:{SSHA}$SHA1\n" >> ../sources/htpasswd)
+        sudo cp ../sources/htpasswd $final_path
+        sudo chmod 440 $final_path/htpasswd
+        sudo chown www-data:www-data $final_path/htpasswd
 
         # Modif nginx
-        sed -i "s|^.*\bauth_basic\b.*$|    auth_basic \"Private Library\";|" ../conf/nginx.conf;
-        sed -i "s|^.*\bauth_basic_user_file\b.*$|    auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
+        sed -i "s|^.*\bauth_basic\b.*$|       auth_basic \"Private Library\";|" ../conf/nginx.conf;
+        sed -i "s|^.*\bauth_basic_user_file\b.*$|       auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
 else
         echo "No basic auth";
 fi
 
-
-# We install dependencies
-sudo apt-get update -y
-sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
-
-# Modify Nginx configuration file and copy it to Nginx conf directory
+# Modify Nginx configuration file and copy it to Nginx conf.d directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
 sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
 sed -i "s@NAMETOCHANGE@$app@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf $finalnginxconf
 
-
+# Modify php-fpm configuration file and copy it to php-fpm pool.d directory
 sed -i "s@NAMETOCHANGE@$app@g" ../conf/php-fpm.conf
 sed -i "s@FOLDERTOCHANGE@$final_path@g" ../conf/php-fpm.conf
 sed -i "s@USERTOCHANGE@$runninguser@g" ../conf/php-fpm.conf
-
 sudo cp ../conf/php-fpm.conf $finalphpconf
 sudo chown root: $finalphpconf
 sudo chmod 644 $finalphpconf
-
-# Removal of old folder and restart from fresh
-sudo rm -rf $final_path
-sudo mkdir -p $final_path
-
-# Site adjustments
-sudo cp ../conf/config_local.php ../sources/
-sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../sources/config_local.php
-timezone=`sudo cat /etc/timezone`;
-sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../sources/config_local.php
-
-sudo cp ../conf/robots.txt ../sources/
-
-# Base site
-sudo cp -a ../sources/* $final_path/
-
-# We adjust permissions
-sudo chmod 775 -R $final_path
-sudo chown -hR $runninguser:$runninguser $final_path
-
-if [ "$basicauthcreate" = "Yes" ];
-then
-        sudo chmod 440 $final_path/htpasswd
-        sudo chown www-data:www-data $final_path/htpasswd
-else
-        echo "Nothing to do"
-fi
-
 
 # Make app public if necessary
 is_public=$(ynh_app_setting_get $app is_public)
