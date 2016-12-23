@@ -26,13 +26,12 @@ CHECK_VAR "$app" "app name not set"
 
 # Check the path value and correct it (adds / at begining and removes it at the end)
 CHECK_PATH;
-
-CHECK_CALIBREPATH;
-
 # Check domain and path availibility
 CHECK_DOMAINPATH
 # Check destination folder is not used already
 CHECK_FINALPATH
+
+CHECK_CALIBREPATH;
 
 final_path=/var/www/$app
 
