@@ -6,8 +6,9 @@
 # Exit on command errors and treat unset variables as an error
 set -eu
 
-# Charge les fonctions génériques habituellement utilisées dans le script
-source fonctions
+TRAP_ON () {    # Activate signal capture
+        trap EXIT_PROPERLY ERR  # Capturing ex it signals on error
+}
 
 # Active trap pour arrêter le script si une erreur est détectée.
 TRAP_ON
@@ -33,7 +34,8 @@ basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 #    || ynh_die "Path not available: ${domain}${path}"
 
 # We install dependencies
-sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-intl
+sudo apt-get update -y
+sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
 
 # Restore sources & data
 sudo mkdir -p $final_path

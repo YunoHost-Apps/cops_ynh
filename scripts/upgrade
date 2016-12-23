@@ -51,8 +51,8 @@ fi
 
 
 # We install dependencies
-sudo apt-get update -q -y
-sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -q -y
+sudo apt-get update -y
+sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
 
 # Modify Nginx configuration file and copy it to Nginx conf directory
 sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
