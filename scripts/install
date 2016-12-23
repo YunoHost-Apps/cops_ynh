@@ -51,8 +51,8 @@ finalphpconf="/etc/php5/fpm/pool.d/${app}.conf"
 ynh_app_setting_set "$app" finalphpconf "$finalphpconf"
 
 # We install dependencies
-sudo apt-get update --quiet --assume-yes
-sudo apt-get install --quiet --assume-yes php5-gd php5-sqlite php5-json php5-intl
+sudo apt-get update -y
+sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
 
 # Creation of folder
 #sudo rm -rf $final_path
