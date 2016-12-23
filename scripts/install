@@ -2,10 +2,10 @@
 #set -eu
 
 # Charge les fonctions génériques habituellement utilisées dans le script
-source fonctions
+#source fonctions
 
 # Active trap pour arrêter le script si une erreur est détectée.
-TRAP_ON
+#TRAP_ON
 
 # Source app helpers
 source /usr/share/yunohost/helpers
@@ -18,17 +18,47 @@ is_public=$YNH_APP_ARG_IS_PUBLIC
 runninguser=$YNH_APP_ARG_RUNNINGUSER
 calibre=$YNH_APP_ARG_CALIBRE
 basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
-basicauthuser=$YNH_APP_ARG_BASICAUTHUSER
+basicauthname=$YNH_APP_ARG_BASICAUTHNAME
 basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
 
 # We check variables are not empty
+CHECK_VAR () {  # Vérifie que la variable n'est pas vide.
+# $1 = Variable à vérifier
+# $2 = Texte à afficher en cas d'erreur
+        test -n "$1" || (echo "$2" >&2 && false)
+}
+
 CHECK_VAR "$app" "app name not set"
 
 # Check the path value and correct it (adds / at begining and removes it at the end)
+CHECK_PATH () { # Vérifie la présence du / en début de path. Et son absence à la fin.
+        if [ "${path:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
+                path="/$path"    # Ajoute un / en début de path
+        fi
+        if [ "${path:${#path}-1}" == "/" ] && [ ${#path} -gt 1 ]; then    # Si le dernier caractère est un / et que ce n'est pas l$
+                path="${path:0:${#path}-1}"     # Supprime le dernier caractère
+        fi
+}
+
 CHECK_PATH;
+
 # Check domain and path availibility
+CHECK_DOMAINPATH () {   # Vérifie la disponibilité du path et du domaine.
+        sudo yunohost app checkurl $domain$path -a $app
+}
+
 CHECK_DOMAINPATH
+
 # Check destination folder is not used already
+CHECK_FINALPATH () {    # Vérifie que le dossier de destination n'est pas déjà utilisé.
+        final_path=/var/www/$app
+        if [ -e "$final_path" ]
+        then
+                echo "This path already contains a folder" >&2
+                false
+        fi
+}
+
 CHECK_FINALPATH
 
 # We check that calibre path is correct
@@ -88,7 +118,7 @@ sudo chown -hR $runninguser:$runninguser $final_path
 # Add basic auth if requested
 if [ "$basicauthcreate" = "Yes" ];
 then
-	ynh_app_setting_set "$app" basicauthuser "$basicauthuser"
+	ynh_app_setting_set "$app" basicauthname "$basicauthname"
 	ynh_app_setting_set "$app" basicauthpass "$basicauthpass"
 
 	# Generation of the htpasswd file according https://www.nginx.com/resources/wiki/community/faq/
@@ -97,7 +127,7 @@ then
 	openssl dgst -binary -sha1 | xxd -ps |
 	sed 's#$#'"`echo -n $SALT | xxd -ps`"'#' |
 	xxd -r -ps |
-	base64);printf "$basicauthuser:{SSHA}$SHA1\n" >> ../sources/htpasswd)
+	base64);printf "$basicauthname:{SSHA}$SHA1\n" >> ../sources/htpasswd)
 	sudo cp ../sources/htpasswd $final_path
 	sudo chmod 440 $final_path/htpasswd
 	sudo chown www-data:www-data $final_path/htpasswd

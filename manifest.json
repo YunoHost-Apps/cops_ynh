@@ -78,7 +78,7 @@
                 "default": "Yes"
             },
             {
-                "name": "basicauthuser",
+                "name": "basicauthname",
                 "ask": {
                     "en": "Choose the username to access the OPDS/HTML server (unrelated to YunoHost users)",
                     "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (NON lié lié aux utilisateurs YunoHost)"
@@ -88,7 +88,6 @@
             },
             {
                 "name": "basicauthpass",
-                "type": "password",
                 "ask": {
                     "en": "Choose the password to access the OPDS/HTML server",
                     "fr": "Renseignez le mot de passe pour accéder au serveur OPDS/HTML"
