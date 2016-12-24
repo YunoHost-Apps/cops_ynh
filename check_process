@@ -7,7 +7,7 @@
         language="fr"
 	runninguser
         calibre
-	is_public=1 (PUBLIC|public=1|private=0)
+	is_public=1 (PUBLIC|public="Yes"|private="No")
 	basicauthcreate
 	basicauthname
 	basicauthpass
