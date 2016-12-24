@@ -17,9 +17,16 @@ path=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 runninguser=$YNH_APP_ARG_RUNNINGUSER
 calibre=$YNH_APP_ARG_CALIBRE
-basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
-basicauthname=$YNH_APP_ARG_BASICAUTHNAME
-basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
+
+# No basic auth if app is private
+if [ "$is_public" = "Yes" ];
+then
+	basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
+	basicauthname=$YNH_APP_ARG_BASICAUTHNAME
+	basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
+else
+	basicauthcreate="No"
+fi
 
 # We check variables are not empty
 CHECK_VAR () {  # Vérifie que la variable n'est pas vide.
@@ -158,6 +165,8 @@ is_public=$(ynh_app_setting_get $app is_public)
 if [ "$is_public" = "Yes" ];
 then
 	ynh_app_setting_set $app skipped_uris "/"
+else
+	echo "nothing";
 fi
 
 # Reload Nginx and regenerate SSOwat conf
