@@ -49,6 +49,7 @@
                     "fr": "Choisissez l'administrateur de COPS (doit être un utilisateur YunoHost existant)"
                 },
                 "example": "homer"
+	    },
             {
                 "name": "calibre",
                 "ask": {
