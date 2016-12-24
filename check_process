@@ -7,7 +7,7 @@
         language="fr"
 	runninguser="www-data"
         calibre="/home/yunohost.app/owncloud/johndoe/"
-	is_public="Yes" (PUBLIC|public="Yes"|private="No")
+	is_public="Yes"	(PUBLIC|public=Yes|private=No)
 	basicauthcreate="Yes"
 	basicauthname="Gutenberg"
 	basicauthpass="hiyjgvhfgvhgbjh"
