@@ -5,12 +5,12 @@
         domain="$DOMAIN"    (DOMAIN)
         path="$PATH"    (PATH)
         language="fr"
-	runninguser
-        calibre
-	is_public=1 (PUBLIC|public="Yes"|private="No")
-	basicauthcreate
-	basicauthname
-	basicauthpass
+	runninguser="www-data"
+        calibre="/home/yunohost.app/owncloud/johndoe/"
+	is_public="Yes" (PUBLIC|public="Yes"|private="No")
+	basicauthcreate="Yes"
+	basicauthname="Gutenberg"
+	basicauthpass="hiyjgvhfgvhgbjh"
 #        password="$PASSWORD"    (PASSWORD)
 #        port="666"  (PORT)
     ; Checks
