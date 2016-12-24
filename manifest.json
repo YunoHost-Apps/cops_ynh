@@ -71,8 +71,8 @@
  	    {
                 "name": "basicauthcreate",
                 "ask": {
-                    "en": "Create a basic auth access ? This is required if the app is public so that ereaders to access the OPDS server, for example",
-                    "fr": "Créer un accès par authentification basique ? Ceci est requis si votre bibliothèque est publique et que vous voulez accéder au serveur OPDS avec votre liseuse ou application mobile"
+                    "en": "Create a basic auth access (only taken into account for a Public app) ? This is required if the app is public so that ereaders to access the OPDS server, for example",
+                    "fr": "Créer un accès par authentification basique (Uniquement pris en compte pour une app Publique) ? Ceci est requis si votre bibliothèque est publique et que vous voulez accéder au serveur OPDS avec votre liseuse ou application mobile"
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
