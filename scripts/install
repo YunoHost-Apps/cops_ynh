@@ -14,6 +14,7 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 domain=$YNH_APP_ARG_DOMAIN
 path=$YNH_APP_ARG_PATH
+admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 runninguser=$YNH_APP_ARG_RUNNINGUSER
 calibre=$YNH_APP_ARG_CALIBRE
@@ -29,6 +30,13 @@ CHECK_VAR () {  # Vérifie que la variable n'est pas vide.
 }
 
 CHECK_VAR "$app" "app name not set"
+
+# Check admin user
+CHECK_USER () { # Vérifie la validité de l'user admin
+# $1 = Variable de l'user admin.
+        ynh_user_exists "$1" || (echo "Wrong admin" >&2 && false)
+}
+CHECK_USER "$admin"
 
 # Check the path value and correct it (adds / at begining and removes it at the end)
 CHECK_PATH () { # Vérifie la présence du / en début de path. Et son absence à la fin.
