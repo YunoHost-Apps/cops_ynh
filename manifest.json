@@ -42,15 +42,6 @@
                 "default": "/cops"
             },
             {
-                "name": "admin",
-                "type": "user",
-                "ask": {
-                    "en": "Choose the COPS administrator (must be an existing YunoHost user)",
-                    "fr": "Choisissez l'administrateur de COPS (doit être un utilisateur YunoHost existant)"
-                },
-                "example": "homer"
-	    },
-            {
                 "name": "calibre",
                 "ask": {
                     "en": "Indicate the location of Calibre library. DON'T store it in your /var/www/cops or it will be removed on next upgrade !!",
@@ -97,6 +88,7 @@
             },
             {
                 "name": "basicauthpass",
+		"type": "password",
                 "ask": {
                     "en": "Choose the password to access the OPDS/HTML server",
                     "fr": "Renseignez le mot de passe pour accéder au serveur OPDS/HTML"
