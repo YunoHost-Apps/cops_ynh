@@ -123,8 +123,13 @@ finalphpconf="/etc/php5/fpm/pool.d/${app}.conf"
 ynh_app_setting_set "$app" finalphpconf "$finalphpconf"
 
 # We install dependencies
-sudo apt-get update -y
-sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
+#sudo apt-get update -y
+#sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
+
+# Install dependencies using Helpers
+ynh_package_install_from_equivs ../conf/cops-deps.control \
+|| ynh_die "Unable to install dependencies"
+
 
 # Creation of folder
 sudo mkdir -p $final_path

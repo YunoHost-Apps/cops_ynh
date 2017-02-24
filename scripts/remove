@@ -35,6 +35,11 @@ sudo rm -rf $final_path
 sudo rm -f $finalnginxconf
 sudo rm -f $finalphpconf
 
+# Remove app dependencies
+if ynh_package_is_installed "cops-deps"; then
+  ynh_package_autoremove "cops-deps"
+fi
+
 # We reload the services
 sudo service php5-fpm reload
 sudo service nginx reload
