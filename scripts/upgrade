@@ -83,8 +83,9 @@ sudo cp ../conf/robots.txt $final_path
 runninguser="${app}-ynh"
 # 1.  Create the user
 # Create a system account for COPS if it doesn't already exists
-test="$(sudo grep ^${runninguser}: /etc/passwd)"
-if [ -n "${test}" ]; then
+check_user="$(sudo grep ^${runninguser}: /etc/passwd)"
+if [ -z "${check_user}" ];
+then
     echo "The user $runninguser does not exist, we can create it"
     sudo useradd -c "$runninguser system account" \
        -d $final_path --system --user-group $runninguser \
@@ -92,6 +93,7 @@ if [ -n "${test}" ]; then
 else
     echo "The user $runninguser exists, no need to create it"
 fi
+
 ynh_app_setting_set "$app" runninguser "$runninguser"
 
 # 2. Add cops-ynh to groups www-data and nextcloud/owncloud if they exist
