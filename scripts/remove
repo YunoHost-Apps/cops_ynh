@@ -2,7 +2,7 @@
 #set -eu
 
 # Charge les fonctions génériques habituellement utilisées dans le script
-#source fonctions
+source .fonctions
 
 # Active trap pour arrêter le script si une erreur est détectée.
 #TRAP_ON
@@ -14,12 +14,6 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 
 # We check variables are not empty
-
-CHECK_VAR () {  # Vérifie que la variable n'est pas vide.
-# $1 = Variable à vérifier
-# $2 = Texte à afficher en cas d'erreur
-        test -n "$1" || (echo "$2" >&2 && false)
-}
 CHECK_VAR "$app" "app name not set"
 
 path=$(ynh_app_setting_get $app path)
@@ -30,11 +24,18 @@ finalphpconf=$(ynh_app_setting_get $app finalphpconf)
 runninguser=$app-ynh
 
 # Suppression du dossier de la webapp
-sudo rm -rf $final_path
+SECURE_REMOVE   '$final_path'
 
 # Suppression de la config nginx de la webapp
-sudo rm -f $finalnginxconf
-sudo rm -f $finalphpconf
+if [ -e "$finalnginxconf" ]; then # Delete nginx config
+	echo "Delete nginx config"
+	sudo rm $finalnginxconf
+fi
+
+if [ -e "$finalphpconf" ]; then # Delete nginx config
+	echo "Delete php-fpm config"
+	sudo rm $finalphpconf
+fi
 
 # Remove app dependencies
 if ynh_package_is_installed "cops-deps"; then
@@ -43,7 +44,7 @@ fi
 
 # Remove the user account
 id "$runninguser" >/dev/null 2>&1 \
-&& sudo deluser --quiet --remove-home "$runninguser" >/dev/null
+&& sudo deluser --quiet "$runninguser" >/dev/null
 
 # We reload the services
 sudo service php5-fpm reload

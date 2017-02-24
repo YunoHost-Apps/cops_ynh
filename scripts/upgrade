@@ -3,34 +3,11 @@
 # We retrieve app parameters
 app=$YNH_APP_INSTANCE_NAME
 
-# Backup the current version of the app, restore it if the upgrade fails
-#if sudo yunohost backup list | grep -q ${app}-before-upgrade > /dev/null 2>&1; then     # Supprime l'ancienne archive seulement si e$
-#        sudo yunohost backup delete ${app}-before-upgrade
-#fi
-#sudo yunohost backup create --ignore-hooks --apps $app --name ${app}-before-upgrade
-EXIT_PROPERLY () {
-        exit_code=$?
-        if [ "$exit_code" -eq 0 ]; then
-                exit 0  # Quitte sans erreur si le script se termine correctement.
-        fi
-        trap '' EXIT
-        set +eu
-        sudo yunohost app remove $app   # Supprime l'application avant de la restaurer.
-        sudo yunohost backup restore --ignore-hooks ${app}-before-upgrade --apps $app --force   # Restore the backup if upgrade fail$
-        ynh_die "Upgrade failed. The app was restored to the way it was before the failed upgrade."
-}
-#set -eu
-#trap EXIT_PROPERLY EXIT
-
 # Source app helpers
+source .fonctions
 source /usr/share/yunohost/helpers
 
 # We check variables are not empty
-CHECK_VAR () {  # Vérifie que la variable n'est pas vide.
-# $1 = Variable à vérifier
-# $2 = Texte à afficher en cas d'erreur
-        test -n "$1" || (echo "$2" >&2 && false)
-}
 CHECK_VAR "$app" "app name not set"
 
 path=$(ynh_app_setting_get $app path)
@@ -42,27 +19,14 @@ calibre=$(ynh_app_setting_get $app calibre)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
 # We check that calibre path is correct
-CHECK_CALIBRE () {  # Vérifie la présence du / en début de path. Et son absence à la fin.
-        if [ "${calibre:0:1}" != "/" ]; then    # Si le premier caractère n'est pas un /
-                calibre="/$calibre"    # Ajoute un / en début de path
-        fi
-        if [ "${calibre:${#calibre}-1}" == "/" ] && [ ${#calibre} -gt 1 ]; then    # Si le dernier caractère est un / $
-                calibre="${calibre:0:${#calibre}-1}"        # Supprime le dernier caractère
-        fi
-}
-
 CHECK_CALIBRE
-
-# We install dependencies
-#sudo apt-get update -y
-#sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
 
 # Install dependencies using Helpers
 ynh_package_install_from_equivs ../conf/cops-deps.control \
 || ynh_die "Unable to install dependencies"
 
 # Removal of old folder and restart from fresh
-sudo rm -rf $final_path
+SECURE_REMOVE '$final_path'
 sudo mkdir -p $final_path
 
 # We download the sources and check the md5sum
