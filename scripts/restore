@@ -45,7 +45,7 @@ sudo cp -a ./sources/* $final_path/
 runninguser="${app}-ynh"
 # 1.  Create the user
 # Create a system account for COPS if it doesn't already exists
-test="$(grep ^${runninguser}: /etc/passwd)"
+test="$(sudo grep ^${runninguser}: /etc/passwd)"
 if [ -n "${test}" ]; then
     echo "The user $runninguser does not exist, we can create it"
     sudo useradd -c "$runninguser system account" \
