@@ -82,10 +82,16 @@ sudo cp ../conf/robots.txt $final_path
 # Create cops user and join nextcloud/owncloud/www-data groups
 runninguser="${app}-ynh"
 # 1.  Create the user
-# Create a system account for COPS
-sudo useradd -c "$runninguser system account" \
-    -d $final_path --system --user-group $runninguser \
-  || ynh_die "Unable to create $runninguser system account"
+# Create a system account for COPS if it doesn't already exists
+getent passwd $runninguser > /dev/null 2&>1
+if [ $? -eq 0 ]; then
+    echo "The user $runninguser exists, no need to create it"
+else
+    echo "No, the user $runninguser does not exist, we can create it"
+    sudo useradd -c "$runninguser system account" \
+       -d $final_path --system --user-group $runninguser \
+       || ynh_die "Unable to create $runninguser system account"
+fi
 ynh_app_setting_set "$app" runninguser "$runninguser"
 
 # 2. Add cops-ynh to groups www-data and nextcloud/owncloud if they exist
@@ -97,7 +103,6 @@ for filesharing in "nextcloud" "owncloud"; do
         sudo usermod -a -G $filesharing $runninguser
     }
 done
-ynh_app_setting_set $app runninguser $runninguser
 
 # Set permissions
 sudo chmod ug+rw -R $final_path
