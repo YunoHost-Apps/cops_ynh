@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 # We retrieve app parameters
 app=$YNH_APP_INSTANCE_NAME

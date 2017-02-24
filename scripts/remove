@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -eu
+set -u
 
 # Charge les fonctions génériques habituellement utilisées dans le script
 SECURE_REMOVE () {      # Suppression de dossier avec vérification des variables
