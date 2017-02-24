@@ -151,8 +151,7 @@ sudo cp ../conf/robots.txt $final_path
 runninguser="${app}-ynh"
 # 1.  Create the user
 # Create a system account for COPS if it doesn't already exists
-check_user="$(sudo grep ^${runninguser}: /etc/passwd)"
-if [ -z "${check_user}" ];
+if ! ynh_system_user_exists "$runninguser" ;
 then
     echo "The user $runninguser does not exist, we can create it"
     sudo useradd -c "$runninguser system account" \
