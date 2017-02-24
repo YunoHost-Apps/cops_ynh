@@ -38,7 +38,6 @@ domain=$(ynh_app_setting_get $app domain)
 final_path=$(ynh_app_setting_get $app final_path)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
-runninguser=$(ynh_app_setting_get $app runninguser)
 calibre=$(ynh_app_setting_get $app calibre)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
@@ -80,8 +79,28 @@ sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../conf/config_local.php
 sudo cp ../conf/config_local.php $final_path
 sudo cp ../conf/robots.txt $final_path
 
+# Create cops user and join nextcloud/owncloud/www-data groups
+runninguser="${app}-ynh"
+# 1.  Create the user
+# Create a system account for COPS
+sudo useradd -c "$runninguser system account" \
+    -d $final_path --system --user-group $runninguser \
+  || ynh_die "Unable to create $runninguser system account"
+ynh_app_setting_set "$app" runninguser "$runninguser"
+
+# 2. Add cops-ynh to groups www-data and nextcloud/owncloud if they exist
+sudo usermod -a -G www-data $runninguser
+for filesharing in "nextcloud" "owncloud"; do
+    app_id=$(sudo yunohost app list --installed -f "$filesharing" \
+            --output-as json | grep -Po '"id":[ ]?"\K.*?(?=")' | head -1)
+    [[ -z "$app_id" ]] || {
+        sudo usermod -a -G $filesharing $runninguser
+    }
+done
+ynh_app_setting_set $app runninguser $runninguser
+
 # Set permissions
-sudo chmod 775 -R $final_path
+sudo chmod ug+rw -R $final_path
 sudo chown -hR $runninguser:$runninguser $final_path
 
 # Add basic auth if requested

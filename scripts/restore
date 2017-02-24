@@ -41,6 +41,25 @@ basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 sudo mkdir -p $final_path
 sudo cp -a ./sources/* $final_path/
 
+# Create cops user and join nextcloud/owncloud/www-data groups
+runninguser="${app}-ynh"
+# 1.  Create the user
+# Create a system account for COPS
+sudo useradd -c "$runninguser system account" \
+    -d $final_path --system --user-group $runninguser \
+  || ynh_die "Unable to create $runninguser system account"
+ynh_app_setting_set "$app" runninguser "$runninguser"
+
+# 2. Add cops-ynh to groups www-data and nextcloud/owncloud if they exist
+sudo usermod -a -G www-data $runninguser
+for filesharing in "nextcloud" "owncloud"; do
+    app_id=$(sudo yunohost app list --installed -f "$filesharing" \
+            --output-as json | grep -Po '"id":[ ]?"\K.*?(?=")' | head -1)
+    [[ -z "$app_id" ]] || {
+        sudo usermod -a -G $filesharing $runninguser
+    }
+done
+
 # Restore permissions to app files
 # you may need to make some file and/or directory writeable by www-data (nginx user)
 sudo chown -R $runninguser:$runninguser $final_path

@@ -51,15 +51,6 @@
                 "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks"
             },
             {
-                "name": "runninguser",
-                "ask": {
-                    "en": "Which system user is managing the Calibre folder ?",
-                    "fr": "Quel utilisateur système gère le dossier Calibre ?"
-                },
-                "choices": ["www-data", "owncloud", "nextcloud"],
-                "default": "www-data"
-            },
-            {
                 "name": "is_public",
                 "ask": {
                     "en": "Is it a public website ?",

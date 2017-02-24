@@ -27,6 +27,7 @@ domain=$(ynh_app_setting_get $app domain)
 final_path=$(ynh_app_setting_get $app final_path)
 finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
 finalphpconf=$(ynh_app_setting_get $app finalphpconf)
+runninguser=$app-ynh
 
 # Suppression du dossier de la webapp
 sudo rm -rf $final_path
@@ -39,6 +40,10 @@ sudo rm -f $finalphpconf
 if ynh_package_is_installed "cops-deps"; then
   ynh_package_autoremove "cops-deps"
 fi
+
+# Remove the user account
+id "$runninguser" >/dev/null 2>&1 \
+&& sudo deluser --quiet --remove-home "$runninguser" >/dev/null
 
 # We reload the services
 sudo service php5-fpm reload
