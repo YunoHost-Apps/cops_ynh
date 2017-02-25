@@ -14,8 +14,8 @@ runninguser=$(ynh_app_setting_get $app runninguser)
 basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
 # We install dependencies
-#sudo apt-get update -y
-#sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
+sudo apt-get update -y
+sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
 
 # Install dependencies using Helpers
 #ynh_package_install_from_equivs ../conf/cops-deps.control \
