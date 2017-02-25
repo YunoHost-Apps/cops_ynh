@@ -37,7 +37,7 @@ sudo md5sum -c ../sources/source_md5 --status || (echo "Corrupt source" >&2 && f
 sudo unzip ${cops_file} -d $final_path
 
 # Site adjustments
-sed -i "s@CALIBRETOCHANGE@$calibrepath@g" ../conf/config_local.php
+sed -i "s@CALIBRETOCHANGE@$calibre@g" ../conf/config_local.php
 timezone=`sudo cat /etc/timezone`;
 sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../conf/config_local.php
 
