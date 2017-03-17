@@ -3,7 +3,7 @@
 # Commentaire ignoré
     ; Manifest
         domain="$DOMAIN"    (DOMAIN)
-        path="$PATH"    (PATH)
+        path="/path"    (PATH)
         language="fr"
 	runninguser="www-data"
         calibre="/home/yunohost.app/owncloud/johndoe/"
