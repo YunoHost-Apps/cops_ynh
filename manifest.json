@@ -72,7 +72,7 @@
                 "name": "basicauthname",
                 "ask": {
                     "en": "Choose the login name to access the OPDS/HTML server (UNRELATED to YunoHost users)",
-                    "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (NON lié lié aux utilisateurs YunoHost)"
+                    "fr": "Indiquez le nom d'utilisateur pour accéder au serveur OPDS/HTML (NON lié aux utilisateurs YunoHost)"
 		},
                 "example": "Gutenberg",
                 "default": "Gutenberg"
