@@ -54,7 +54,7 @@
                 "name": "is_public",
                 "ask": {
                     "en": "Is it a public website ?",
-                    "fr": "Est-ce un site publique ?"
+                    "fr": "Est-ce un site public ?"
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
