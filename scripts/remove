@@ -66,7 +66,7 @@ fi
 
 # Remove app dependencies
 if ynh_package_is_installed "cops-deps"; then
-  ynh_remove_app_dependencies
+  ynh_package_autoremove "cops-deps"
 fi
 
 # Remove the user account~
