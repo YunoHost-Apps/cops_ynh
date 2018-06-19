@@ -44,7 +44,8 @@ CHECK_PATH () { # Vérifie la présence du / en début de path. Et son absence �
 
 # Check domain and path availibility
 CHECK_DOMAINPATH () {   # Vérifie la disponibilité du path et du domaine.
-        sudo yunohost app checkurl $domain$path -a $app
+        ynh_webpath_available $domain $path
+        ynh_webpath_register $app $domain $path
 }
 
 # Check destination folder is not used already
