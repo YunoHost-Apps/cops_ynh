@@ -15,7 +15,7 @@ basicauthcreate=$(ynh_app_setting_get $app basicauthcreate)
 
 # We install dependencies
 sudo apt-get update -y
-sudo apt-get install php5-gd php5-sqlite php5-json php5-intl -y
+sudo apt-get install php7.0-gd php7.0-sqlite3 php7.0-json php7.0-intl -y
 
 # Install dependencies using Helpers
 #ynh_package_install_from_equivs ../conf/cops-deps.control \
@@ -84,6 +84,6 @@ fi
 
 # Restart webserver
 sudo service nginx reload
-sudo service php5-fpm reload
+sudo service php7.0-fpm reload
 sudo yunohost app ssowatconf
 

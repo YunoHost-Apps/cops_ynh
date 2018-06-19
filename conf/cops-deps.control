@@ -5,7 +5,7 @@ Standards-Version: 1.0.1
 
 Package: cops-deps
 Version: 1.2-1
-Depends: php5-gd, php5-sqlite, php5-json, php5-intl
+Depends: php7.0-gd, php7.0-sqlite3, php7.0-json, php7.0-intl
 Architecture: all
 Description: meta package for cops dependencies
  COPS stands for Calibre OPDS (and HTML) Php Server.

@@ -54,7 +54,7 @@ ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
 finalnginxconf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
 ynh_app_setting_set "$app" finalnginxconf "$finalnginxconf"
 
-finalphpconf="/etc/php5/fpm/pool.d/${app}.conf"
+finalphpconf="/etc/php/7.0/fpm/pool.d/${app}.conf"
 ynh_app_setting_set "$app" finalphpconf "$finalphpconf"
 
 # Install dependencies using Helpers
@@ -157,6 +157,6 @@ else
 fi
 
 # Reload Nginx and regenerate SSOwat conf
-sudo service php5-fpm reload
+sudo service php7.0-fpm reload
 sudo service nginx reload
 sudo yunohost app ssowatconf
