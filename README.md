@@ -1,4 +1,4 @@
-# COPS : Calibre OPDS (and HTML) PHP Server
+# COPS for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/cops.svg)](https://dash.yunohost.org/appci/app/cops) ![](https://ci-apps.yunohost.org/ci/badges/cops.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/cops.maintain.svg)
 
@@ -8,6 +8,9 @@
 
 * Creates an OPDS and HTML server based on a Calibre folder stored in Owncloud or NextCloud
 
-* Sources used:
-</br>http://blog.slucas.fr/fr/oss/calibre-opds-php-server
-</br>Packaged version : 1.0.1
+Packaged version : 1.0.1
+
+ * Report a bug: https://github.com/YunoHost-Apps/cops_ynh/issues
+ * App website: http://blog.slucas.fr/fr/oss/calibre-opds-php-server
+ * Upstream app repository: https://github.com/seblucas/cops
+ * YunoHost website: https://yunohost.org/
