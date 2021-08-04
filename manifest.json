@@ -7,7 +7,7 @@
         "fr": "Calibre OPDS (et HTML) PHP Serveur"
     },
     "url": "https://github.com/YunoHost-Apps/cops_ynh",
-    "license": "free",
+    "license": "GPL-2.0",
     "maintainer": {
         "name": "polytan02",
         "email": "polytan02@mcgva.org"
@@ -15,29 +15,21 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "php5-fpm"
+        "php7.3-fpm"
     ],
     "requirements": {
-         "yunohost": ">= 2.4.0"
+         "yunohost": ">= 4.2.0"
     },
     "arguments": {
         "install" : [
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for COPS library",
-                    "fr": "Choisissez un domaine pour votre bibliotheque COPS"
-                },
                 "example": "domain.tld"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path to access your COPS library",
-                    "fr": "Choisissez un chemin pour acceder a votre bibliotheque COPS"
-                },
                 "example": "/cops",
                 "default": "/cops"
             },
@@ -52,14 +44,10 @@
             },
             {
                 "name": "is_public",
-                "ask": {
-                    "en": "Is it a public website ?",
-                    "fr": "Est-ce un site publique ?"
-                },
-                "choices": ["Yes", "No"],
-                "default": "Yes"
+                "type": "boolean",
+                "default": true
             },
- 	    {
+ 	        {
                 "name": "basicauthcreate",
                 "ask": {
                     "en": "Create a basic auth access (only taken into account for a Public app) ? This is required if the app is public so that ereaders to access the OPDS server, for example",
@@ -79,12 +67,12 @@
             },
             {
                 "name": "basicauthpass",
-		"type": "password",
+		        "type": "password",
                 "ask": {
                     "en": "Choose the password to access the OPDS/HTML server",
                     "fr": "Renseignez le mot de passe pour accéder au serveur OPDS/HTML"
                 },
-		"example": "knowledge is power",
+		        "example": "knowledge is power",
                 "default": "knowledge is power"
             }
         ]

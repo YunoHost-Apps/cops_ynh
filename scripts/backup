@@ -1,22 +1,84 @@
 #!/bin/bash
-set -eu
-app=$YNH_APP_INSTANCE_NAME
 
-# Source YunoHost helpers
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+# Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
-final_path=$(ynh_app_setting_get $app final_path)
-finalnginxconf=$(ynh_app_setting_get $app finalnginxconf)
-finalphpconf=$(ynh_app_setting_get $app finalphpconf)
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
 
-# Backup sources & data
-# Note: the last argument is where to save this path, see the restore script.
-ynh_backup "$final_path" "sources"
+ynh_clean_setup () {
+	### Remove this function if there's nothing to clean before calling the remove script.
+	true
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
-# Copy NGINX configuration
-ynh_backup "$finalnginxconf" "nginx.conf"
+#=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_print_info --message="Loading installation settings..."
 
-### PHP (remove if not used) ###
-# If a dedicated php-fpm process is used:
-# # Copy PHP-FPM pool configuration
-ynh_backup "$finalphpconf" "php-fpm.conf"
+app=$YNH_APP_INSTANCE_NAME
+
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+phpversion=$(ynh_app_setting_get --app=$app --key=phpversion)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+
+#=================================================
+# DECLARE DATA AND CONF FILES TO BACKUP
+#=================================================
+ynh_print_info --message="Declaring files to be backed up..."
+
+#=================================================
+# BACKUP THE APP MAIN DIR
+#=================================================
+
+ynh_backup --src_path="$final_path"
+
+# #=================================================
+# # BACKUP THE DATA DIR
+# #=================================================
+
+# ynh_backup --src_path="$datadir" --is_big
+
+#=================================================
+# BACKUP THE NGINX CONFIGURATION
+#=================================================
+
+ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# BACKUP THE PHP-FPM CONFIGURATION
+#=================================================
+
+ynh_backup --src_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
+
+#=================================================
+# BACKUP FAIL2BAN CONFIGURATION
+#=================================================
+
+ynh_backup --src_path="/etc/fail2ban/jail.d/$app.conf"
+ynh_backup --src_path="/etc/fail2ban/filter.d/$app.conf"
+
+#=================================================
+# SPECIFIC BACKUP
+#=================================================
+# BACKUP LOGROTATE
+#=================================================
+
+ynh_backup --src_path="/etc/logrotate.d/$app"
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."

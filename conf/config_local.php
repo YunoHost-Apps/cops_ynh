@@ -3,17 +3,24 @@
         $config = array();
 
     /*
+     ***************************************************
+     * Please read config_default.php for all possible
+     * configuration items
+     ***************************************************
+     */
+
+    /*
      * The directory containing calibre's metadata.db file, with sub-directories
      * containing all the formats.
      * BEWARE : it has to end with a /
      */
-    $config['calibre_directory'] = 'CALIBRETOCHANGE/';
-
+    $config['calibre_directory'] = '__DOMAIN____PATH__';
+    
     /*
      * Catalog's title
      */
     $config['cops_title_default'] = "COPS";
-
+    
     /*
      * use URL rewriting for downloading of ebook in HTML catalog
      * See README for more information
@@ -22,13 +29,18 @@
      */
     $config['cops_use_url_rewriting'] = "0";
 
-    $config['cops_recentbooks_limit'] = '10';
+        /*
+     * Set language code to force a language (see lang/ directory for available languages).
+     * When empty it will auto detect the language.
+     */
+    $config['cops_language'] = '__LANGUAGE__';
 
-    $config['default_timezone'] = "TIMEZONETOCHANGE";
-
-    $config['cops_template'] = 'default';
-
-    $config['cops_style'] = 'iphone';
+        /*
+     * Default timezone
+     * Check following link for other timezones :
+     * http://www.php.net/manual/en/timezones.php
+     */
+    $config['default_timezone'] = '__TIMEZONE__';
 
 
 
