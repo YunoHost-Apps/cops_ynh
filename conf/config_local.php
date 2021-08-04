@@ -14,8 +14,14 @@
      * containing all the formats.
      * BEWARE : it has to end with a /
      */
-    $config['calibre_directory'] = '__DOMAIN____PATH__';
+    $config['calibre_directory'] = '__CALIBRE__';
+
+    $config['calibre_internal_directory'] = '/Calibre/';
     
+    $config['cops_full_url'] = '__DOMAIN____PATH__ '; 
+
+    $config['cops_x_accel_redirect'] = "X-Accel-Redirect";
+
     /*
      * Catalog's title
      */
@@ -27,7 +33,7 @@
      *  1 : enable
      *  0 : disable
      */
-    $config['cops_use_url_rewriting'] = "0";
+    $config['cops_use_url_rewriting'] = "1";
 
         /*
      * Set language code to force a language (see lang/ directory for available languages).
@@ -41,6 +47,3 @@
      * http://www.php.net/manual/en/timezones.php
      */
     $config['default_timezone'] = '__TIMEZONE__';
-
-
-
