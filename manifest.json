@@ -6,8 +6,14 @@
         "en": "Calibre OPDS (and HTML) PHP Server",
         "fr": "Calibre OPDS (et HTML) PHP Serveur"
     },
-    "url": "https://github.com/YunoHost-Apps/cops_ynh",
+    "url": "https://blog.slucas.fr/projects/calibre-opds-php-server/",
     "license": "GPL-2.0",
+    "upstream": {
+        "license": "GPL-2.0",
+        "website": "https://blog.slucas.fr/projects/calibre-opds-php-server/",
+        "demo": "http://cops-demo.slucas.fr/index.php",
+        "code": "https://github.com/seblucas/cops"
+    },
     "maintainer": {
         "name": "polytan02",
         "email": "polytan02@mcgva.org"
