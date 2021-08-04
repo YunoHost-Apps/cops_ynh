@@ -8,9 +8,6 @@
         password="pass"
         runninguser="www-data"
         calibre="/home/yunohost.app/owncloud/johndoe/"
-        basicauthcreate="Yes"
-        basicauthname="Gutenberg"
-        basicauthpass="hiyjgvhfgvhgbjh"
     ; Checks
         pkg_linter=1
         setup_sub_dir=1
@@ -19,7 +16,7 @@
         setup_private=1
         setup_public=1
         upgrade=1
-        upgrade=1   from_commit=CommitHash
+        #upgrade=1   from_commit=CommitHash
         backup_restore=1
         multi_instance=1
         port_already_use=0
