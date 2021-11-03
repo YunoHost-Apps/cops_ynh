@@ -30,8 +30,7 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "domain.tld"
+                "type": "domain"
             },
             {
                 "name": "path",
