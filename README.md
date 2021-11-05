@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Calibre OPDS (and HTML) PHP Server
 
-**Shipped version:** 
+**Shipped version:** 1.1.3~ynh1
 
 **Demo:** http://cops-demo.slucas.fr/index.php
 
