@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Calibre OPDS (et HTML) PHP Serveur
 
-**Version incluse :** 
+**Version incluse :** 1.1.3~ynh1
 
 **Démo :** http://cops-demo.slucas.fr/index.php
 
