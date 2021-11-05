@@ -123,7 +123,7 @@ ynh_script_progression --message="Adding a configuration file..." --weight=1
 
 ynh_add_config --template="../conf/config_local.php" --destination="$final_path/config_local.php"
 
-chmod 400 "$final_path/config_local.php"
+chmod 600 "$final_path/config_local.php"
 chown $app "$final_path/config_local.php"
 
 #=================================================
