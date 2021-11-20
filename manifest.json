@@ -50,16 +50,6 @@
                 "default": "fr"
             },
             {
-                "name": "calibre",
-                "type": "string",
-                "ask": {
-                    "en": "Indicate the location of Calibre library. DON'T store it in your /var/www/cops or it will be removed on next upgrade !!",
-                    "fr": "Indiquez le chemin de votre bibliotheque Calibre. Ne la mettez pas dans /var/www/cops ou elle sera supprimée à la prochaine upgrade !!!"
-                },
-                "example": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks",
-                "default": "/home/yunohost.app/owncloud/data/johndoe/files/eBooks"
-            },
-            {
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
