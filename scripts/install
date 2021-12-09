@@ -96,16 +96,23 @@ ynh_add_fpm_config
 #=================================================
 # CREATE DATA DIRECTORY
 #=================================================
-ynh_script_progression --message="Creating a data directory..." --weight=1
+ynh_script_progression --message="Creating a calibre directory..." --weight=1
 
-datadir=/home/yunohost.app/$app
-ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+#build multimedia directory
+ynh_multimedia_build_main_dir
+ynh_multimedia_addaccess $app
 
-mkdir -p $datadir
+calibre_dir=/home/yunohost.multimedia/share/eBook
+ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
 
-chmod 750 "$datadir"
-chmod -R o-rwx "$datadir"
-chown -R $app:www-data "$datadir"
+#Check if metadata.db file exists. If not create it (empty library)
+if [ ! -e "$calibre_dir"/metadata.db ]; then
+	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
+fi
+
+chmod 750 "$calibre_dir"
+chmod -R o-rwx "$calibre_dir"
+chown -R $app:www-data "$calibre_dir"
 
 #=================================================
 # ADD A CONFIGURATION

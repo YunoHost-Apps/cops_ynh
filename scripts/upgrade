@@ -20,6 +20,7 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 language=$(ynh_app_setting_get --app=$app --key=language)
+calibre_dir=$(ynh_app_setting_get --app=$app --key=calibre_dir)
 
 #=================================================
 # CHECK VERSION
@@ -54,6 +55,18 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+
+if [ ! -e "$calibre_dir" ]; then
+	ynh_print_info "Create calibre library folder $calibre_dir"
+	mkdir -p $calibre_dir
+	chown -R $app:www-data $calibre_dir
+fi
+
+#Check if metadata.db file exists. If not create it (empty library)
+if [ ! -e "$calibre_dir"/metadata.db ]; then
+	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
+	chown $app:www-data $calibre_dir/*
+fi
 
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
@@ -108,6 +121,22 @@ ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
+
+#=================================================
+# RESTORE THE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Creating a calibre directory..." --weight=1
+
+#build multimedia directory
+ynh_multimedia_build_main_dir
+ynh_multimedia_addaccess $app
+
+calibre_dir="/home/yunohost.multimedia/share/eBook"
+ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
+
+chmod 750 "$calibre_dir"
+chmod -R o-rwx "$calibre_dir"
+chown -R $app:www-data "$calibre_dir"
 
 #=================================================
 # UPDATE A CONFIG FILE

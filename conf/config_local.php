@@ -14,7 +14,7 @@
      * containing all the formats.
      * BEWARE : it has to end with a /
      */
-    $config['calibre_directory'] = '__DATADIR__';
+    $config['calibre_directory'] = '__CALIBRE_DIR__/';
 
 /*
 *  $config['calibre_internal_directory'] = '/Calibre/';
