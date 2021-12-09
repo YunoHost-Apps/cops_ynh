@@ -16,13 +16,13 @@
      */
     $config['calibre_directory'] = '__CALIBRE_DIR__/';
 
-/*
-*  $config['calibre_internal_directory'] = '/Calibre/';
-*   
-*  $config['cops_full_url'] = '__DOMAIN____PATH__/ '; 
-*
-*   $config['cops_x_accel_redirect'] = "X-Accel-Redirect";
-*/
+
+$config['calibre_internal_directory'] = '/Calibre/';
+ 
+$config['cops_full_url'] = '__DOMAIN____PATH__/ '; 
+
+$config['cops_x_accel_redirect'] = "X-Accel-Redirect";
+
     /*
      * Catalog's title
      */

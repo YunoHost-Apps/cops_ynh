@@ -105,12 +105,13 @@ ynh_multimedia_addaccess $app
 calibre_dir=/home/yunohost.multimedia/share/eBook
 ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
 
-# #Check if metadata.db file exists. If not create it (empty library)
-# if [ ! -e "$calibre_dir"/metadata.db ]; then
-# 	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
-# fi
+#Check if metadata.db file exists. If not create it (empty library)
+if [ ! -e "$calibre_dir"/metadata.db ]; then
+	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
+fi
 
 chmod 750 "$calibre_dir"
+chmod 777 "$calibre_dir/metadata.db"
 chmod -R o-rwx "$calibre_dir"
 chown -R $app:www-data "$calibre_dir"
 
