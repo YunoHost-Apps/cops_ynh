@@ -21,6 +21,14 @@ Calibre OPDS (and HTML) PHP Server
 
 **Demo:** http://cops-demo.slucas.fr/index.php
 
+## Disclaimers / important information
+
+    You need to indicate the true path of your calibre library and make sure COPS runs under the same user as were the files are located
+
+    Designed to work best with OwnCloud or NextCloud
+
+    Creates an OPDS and HTML server based on a Calibre folder stored in NextCloud
+
 ## Documentation and resources
 
 * Official app website: https://blog.slucas.fr/projects/calibre-opds-php-server/
