@@ -110,9 +110,9 @@ if [ ! -e "$calibre_dir"/metadata.db ]; then
 	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
 fi
 
-chmod 750 "$calibre_dir"
-chmod -R o-rwx "$calibre_dir"
-chown -R $app:www-data "$calibre_dir"
+#chmod 750 "$calibre_dir"
+#chmod -R o-rwx "$calibre_dir"
+#chown -R $app:www-data "$calibre_dir"
 
 #=================================================
 # ADD A CONFIGURATION
