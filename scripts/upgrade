@@ -58,7 +58,9 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
 if [ ! -e "$calibre_dir" ]; then
 	ynh_print_info "Create calibre library folder $calibre_dir"
-	mkdir -p $calibre_dir
+	ynh_multimedia_build_main_dir
+    ynh_multimedia_addaccess $app
+    calibre_dir=/home/yunohost.multimedia/share/eBook
 	chown -R $app:www-data $calibre_dir
 fi
 

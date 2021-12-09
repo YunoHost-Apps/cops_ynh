@@ -43,7 +43,7 @@ ynh_backup --src_path="$final_path"
 # BACKUP THE DATA DIR
 #=================================================
 
-ynh_backup --src_path="$calibre_dir" --is_big
+#ynh_backup --src_path="$calibre_dir" --is_big
 
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
