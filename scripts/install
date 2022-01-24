@@ -1,162 +1,150 @@
 #!/bin/bash
-#set -eu
 
-# Charge les fonctions génériques habituellement utilisées dans le script
-source .fonctions
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-# Active trap pour arrêter le script si une erreur est détectée.
-TRAP_ON
-
-# Source app helpers
+source _common.sh
 source /usr/share/yunohost/helpers
 
-# Retrieve arguments
-app=$YNH_APP_INSTANCE_NAME
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
 domain=$YNH_APP_ARG_DOMAIN
-path=$YNH_APP_ARG_PATH
+path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
-calibre=$YNH_APP_ARG_CALIBRE
+language=$YNH_APP_ARG_LANGUAGE
+timezone="$(cat /etc/timezone)"
+phpversion=$YNH_PHP_VERSION
 
-# No basic auth if app is private
-if [ "$is_public" = "Yes" ];
-then
-	basicauthcreate=$YNH_APP_ARG_BASICAUTHCREATE
-	basicauthname=$YNH_APP_ARG_BASICAUTHNAME
-	basicauthpass=$YNH_APP_ARG_BASICAUTHPASS
-else
-	basicauthcreate="No"
-fi
+app=$YNH_APP_INSTANCE_NAME
 
-# We check variables are not empty
-CHECK_VAR "$app" "app name not set"
-
-# Check the path value and correct it (adds / at begining and removes it at the end)
-CHECK_PATH;
-
-# Check domain and path availibility
-CHECK_DOMAINPATH
-
-# Check destination folder is not used already
-CHECK_FINALPATH
-
-# We check that calibre path is correct
-CHECK_CALIBRE;
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+ynh_script_progression --message="Validating installation parameters..." --weight=1
 
 final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
-# Define variables and Save app settings
-ynh_app_setting_set "$app" domain "$domain"
-ynh_app_setting_set "$app" is_public "$is_public"
-ynh_app_setting_set "$app" final_path "$final_path"
-ynh_app_setting_set "$app" calibre "$calibre"
-ynh_app_setting_set "$app" basicauthcreate "$basicauthcreate"
+# Register (book) web path
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
-finalnginxconf="/etc/nginx/conf.d/${domain}.d/${app}.conf"
-ynh_app_setting_set "$app" finalnginxconf "$finalnginxconf"
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+ynh_script_progression --message="Storing installation settings..." --weight=1
 
-finalphpconf="/etc/php5/fpm/pool.d/${app}.conf"
-ynh_app_setting_set "$app" finalphpconf "$finalphpconf"
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=language --value=$language
 
-# Install dependencies using Helpers
-ynh_package_install_from_equivs ../conf/cops-deps.control \
-|| ynh_die "Unable to install dependencies"
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Installing dependencies..." --weight=1
 
+ynh_install_app_dependencies $pkg_dependencies
 
-# Creation of folder
-sudo mkdir -p $final_path
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=1
 
-# We download the sources and check the md5sum
-cops_file=`sudo cat ../sources/source_file`;
-sudo wget -nv -i ../sources/source_url -O $cops_file
-sudo md5sum -c ../sources/source_md5 --status || (echo "Corrupt source" >&2 && false)
-sudo unzip ${cops_file} -d $final_path
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
-# Site adjustments
-sed -i "s@CALIBRETOCHANGE@$calibre@g" ../conf/config_local.php
-timezone=`sudo cat /etc/timezone`;
-sed -i "s@TIMEZONETOCHANGE@$timezone@g" ../conf/config_local.php
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+ynh_script_progression --message="Setting up source files..." --weight=1
 
-sudo cp ../conf/config_local.php $final_path
-sudo cp ../conf/robots.txt $final_path
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$final_path"
 
-# Create cops user and join nextcloud/owncloud/www-data groups
-runninguser="${app}-ynh"
-# 1.  Create the user
-# Create a system account for COPS if it doesn't already exists
-if ! ynh_system_user_exists "$runninguser" ;
-then
-    echo "The user $runninguser does not exist, we can create it"
-    sudo useradd -c "$runninguser system account" \
-       -d $final_path --system --user-group $runninguser \
-       || ynh_die "Unable to create $runninguser system account"
-else
-    echo "The user $runninguser exists, no need to create it"
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Configuring PHP-FPM..." --weight=1
+
+# Create a dedicated PHP-FPM config
+ynh_add_fpm_config
+
+#=================================================
+# CREATE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Creating a calibre directory..." --weight=1
+
+#build multimedia directory
+ynh_multimedia_build_main_dir
+ynh_multimedia_addaccess $app
+
+calibre_dir=/home/yunohost.multimedia/share/eBook
+ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
+
+#Check if metadata.db file exists. If not create it (empty library)
+if [ ! -e "$calibre_dir"/metadata.db ]; then
+	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
 fi
 
-ynh_app_setting_set "$app" runninguser "$runninguser"
+chmod 750 "$calibre_dir"
+chmod 775 "$calibre_dir/metadata.db"
+chmod -R o-rwx "$calibre_dir"
+chown -R $app:www-data "$calibre_dir"
 
-# 2. Add cops-ynh to groups www-data and nextcloud/owncloud if they exist
-sudo usermod -a -G www-data $runninguser
-for filesharing in "nextcloud" "owncloud"; do
-    app_id=$(sudo yunohost app list --installed -f "$filesharing" \
-            --output-as json | grep -Po '"id":[ ]?"\K.*?(?=")' | head -1)
-    [[ -z "$app_id" ]] || {
-	sudo usermod -a -G $filesharing $runninguser
-    }
-done
+#=================================================
+# ADD A CONFIGURATION
+#=================================================
+ynh_script_progression --message="Adding a configuration file..." --weight=1
 
-# Set permissions
-sudo chmod ug+rw -R $final_path
-sudo chown -hR $runninguser:$runninguser $final_path
+ynh_add_config --template="../conf/config_local.php" --destination="$final_path/config_local.php"
 
-# Add basic auth if requested
-if [ "$basicauthcreate" = "Yes" ];
-then
-	ynh_app_setting_set "$app" basicauthname "$basicauthname"
-	ynh_app_setting_set "$app" basicauthpass "$basicauthpass"
+chmod 600 "$final_path/config_local.php"
+chown $app "$final_path/config_local.php"
 
-	# Generation of the htpasswd file according https://www.nginx.com/resources/wiki/community/faq/
-	SALT="$(openssl rand -base64 3)"
-	(SHA1=$(printf "$basicauthpass$SALT" |
-	openssl dgst -binary -sha1 | xxd -ps |
-	sed 's#$#'"`echo -n $SALT | xxd -ps`"'#' |
-	xxd -r -ps |
-	base64);printf "$basicauthname:{SSHA}$SHA1\n" >> ../sources/htpasswd)
-	sudo cp ../sources/htpasswd $final_path
-	sudo chmod 440 $final_path/htpasswd
-	sudo chown www-data:www-data $final_path/htpasswd
-
-	# Modif nginx
-	sed -i "s|^.*\bauth_basic\b.*$|       auth_basic \"Private Library\";|" ../conf/nginx.conf;
-	sed -i "s|^.*\bauth_basic_user_file\b.*$|       auth_basic_user_file $final_path/htpasswd;|" ../conf/nginx.conf;
-else
-	echo "No basic auth";
-fi
-
-# Modify Nginx configuration file and copy it to Nginx conf.d directory
-sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf
-sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf
-sed -i "s@NAMETOCHANGE@$app@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf $finalnginxconf
-
-# Modify php-fpm configuration file and copy it to php-fpm pool.d directory
-sed -i "s@NAMETOCHANGE@$app@g" ../conf/php-fpm.conf
-sed -i "s@FOLDERTOCHANGE@$final_path@g" ../conf/php-fpm.conf
-sed -i "s@USERTOCHANGE@$runninguser@g" ../conf/php-fpm.conf
-sudo cp ../conf/php-fpm.conf $finalphpconf
-sudo chown root: $finalphpconf
-sudo chmod 644 $finalphpconf
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Configuring permissions..." --weight=1
 
 # Make app public if necessary
-is_public=$(ynh_app_setting_get $app is_public)
-if [ "$is_public" = "Yes" ];
+if [ $is_public -eq 1 ]
 then
-	ynh_app_setting_set $app skipped_uris "/"
-else
-        ynh_app_setting_set $app protected_uris "/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
-# Reload Nginx and regenerate SSOwat conf
-sudo service php5-fpm reload
-sudo service nginx reload
-sudo yunohost app ssowatconf
+#=================================================
+# RELOAD NGINX
+#=================================================
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last

@@ -1,18 +1,10 @@
-;; master
-    auto_remove=1
-# Commentaire ignoré
+;; Test complet
     ; Manifest
-        domain="$DOMAIN"    (DOMAIN)
-        path="/path"    (PATH)
+        domain="domain.tld"
+        path="/path"
+        admin="john"
         language="fr"
-	runninguser="www-data"
-        calibre="/home/yunohost.app/owncloud/johndoe/"
-	is_public="Yes"	(PUBLIC|public=Yes|private=No)
-	basicauthcreate="Yes"
-	basicauthname="Gutenberg"
-	basicauthpass="hiyjgvhfgvhgbjh"
-#        password="$PASSWORD"    (PASSWORD)
-#        port="666"  (PORT)
+        is_public=1
     ; Checks
         pkg_linter=1
         setup_sub_dir=1
@@ -21,12 +13,14 @@
         setup_private=1
         setup_public=1
         upgrade=1
+        #upgrade=1   from_commit=CommitHash
         backup_restore=1
         multi_instance=1
-        wrong_user=0
-        wrong_path=1
-        incorrect_path=1
-        corrupt_source=0
-        fail_download_source=0
-        port_already_use=0 (XXXX)
-        final_path_already_use=0
+        change_url=0
+;;; Options
+Email=
+Notification=none
+;;; Upgrade options
+    ; commit=CommitHash
+        name=Name and date of the commit.
+        manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
