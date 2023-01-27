@@ -40,13 +40,6 @@ test ! -d $final_path || ynh_die --message="There is already a directory: $final
 #=================================================
 # STANDARD RESTORATION STEPS
 #=================================================
-# RESTORE THE NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Restoring the NGINX configuration..." --weight=1
-
-ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
-
-#=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Recreating the dedicated system user..." --weight=1
@@ -87,6 +80,13 @@ chown -R $app:www-data "$calibre_dir"
 ynh_script_progression --message="Restoring the PHP-FPM configuration..." --weight=1
 
 ynh_restore_file --origin_path="/etc/php/$phpversion/fpm/pool.d/$app.conf"
+
+#=================================================
+# RESTORE THE NGINX CONFIGURATION
+#=================================================
+ynh_script_progression --message="Restoring the NGINX configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
 # REINSTALL DEPENDENCIES
