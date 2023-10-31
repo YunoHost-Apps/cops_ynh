@@ -6,6 +6,7 @@ It shall NOT be edited by hand.
 # COPS pour YunoHost
 
 [![Niveau d’intégration](https://dash.yunohost.org/integration/cops.svg)](https://dash.yunohost.org/appci/app/cops) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/cops.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/cops.maintain.svg)
+
 [![Installer COPS avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cops)
 
 *[Read this readme in english.](./README.md)*
@@ -36,7 +37,7 @@ Calibre OPDS (et HTML) PHP Serveur
 
 * Site officiel de l’app : <https://blog.slucas.fr/projects/calibre-opds-php-server/>
 * Dépôt de code officiel de l’app : <https://github.com/seblucas/cops>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_cops>
+* YunoHost Store: <https://apps.yunohost.org/app/cops>
 * Signaler un bug : <https://github.com/YunoHost-Apps/cops_ynh/issues>
 
 ## Informations pour les développeurs
