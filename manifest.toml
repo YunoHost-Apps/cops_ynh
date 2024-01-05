@@ -38,7 +38,7 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     [install.language]
     ask.en = "Choose the application language"
     ask.fr = "Choisissez la langue de l'application"
-    type = "string"
+    type = "select"
     choices = ["fr", "en"]
     default = "fr"
 
@@ -57,6 +57,7 @@ ram.runtime = "50M" # FIXME: replace with an **estimate** minimum ram requiremen
     [resources.install_dir]
 
     [resources.permissions]
+    main.url = "/"
 
     [resources.apt]
     packages = [
