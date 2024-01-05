@@ -1,0 +1,71 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
+packaging_format = 2
+
+id = "cops"
+name = "COPS"
+description.en = "Calibre OPDS (and HTML) PHP Server"
+description.fr = "Calibre OPDS (et HTML) PHP Serveur"
+
+version = "1.1.3~ynh1"
+
+maintainers = ["polytan02"]
+
+[upstream]
+license = "GPL-2.0"
+code = "https://github.com/seblucas/cops"
+website = "https://blog.slucas.fr/projects/calibre-opds-php-server/"
+demo = "http://cops-demo.slucas.fr/index.php"
+
+[integration]
+yunohost = ">= 11.0.9"
+architectures = "all"
+multi_instance = true
+ldap = "not_relevant"
+sso = "not_relevant"
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/cops"
+
+    [install.language]
+    ask.en = "Choose the application language"
+    ask.fr = "Choisissez la langue de l'application"
+    type = "select"
+    choices = ["fr", "en"]
+    default = "fr"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+[resources]
+    [resources.sources.main]
+    url = "https://github.com/seblucas/cops/releases/download/1.1.3/cops-1.1.3.zip"
+    sha256 = "68c9efb340ab30989cd89a19a173c45872d33ed85dd02674f8af08b7748cbc77"
+    in_subdir = false
+
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.apt]
+    packages = [
+        "php7.4-xml",
+        "php7.4-mbstring",
+        "php7.4-zip",
+        "php7.4-gd",
+        "php7.4-sqlite3",
+        "php7.4-json",
+        "php7.4-intl",
+    ]

@@ -16,19 +16,12 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Calibre OPDS (et HTML) PHP Serveur
+Creates an OPDS and HTML server based on a Calibre folder stored in NextCloud
+
 
 **Version incluse :** 1.1.3~ynh1
 
 **Démo :** http://cops-demo.slucas.fr/index.php
-## Avertissements / informations importantes
-
-    You need to indicate the true path of your calibre library and make sure COPS runs under the same user as were the files are located
-
-    Designed to work best with OwnCloud or NextCloud
-
-    Creates an OPDS and HTML server based on a Calibre folder stored in NextCloud
-
 ## :red_circle: Fonctions indésirables
 
 - **Package not maintained**: This YunoHost package is not maintained and needs adoption.
