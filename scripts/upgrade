@@ -9,39 +9,7 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-#=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-language=$(ynh_app_setting_get --app=$app --key=language)
-calibre_dir=$(ynh_app_setting_get --app=$app --key=calibre_dir)
-timezone="$(cat /etc/timezone)"
-
-#=================================================
-# CHECK VERSION
-#=================================================
-
 upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
-
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-    # Restore it if the upgrade fails
-    ynh_restore_upgradebackup
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -50,85 +18,36 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-if [ ! -e "$calibre_dir" ]; then
-	ynh_print_info "Create calibre library folder $calibre_dir"
-	ynh_multimedia_build_main_dir
-    ynh_multimedia_addaccess $app
-    calibre_dir=/home/yunohost.multimedia/share/eBook
-	chown -R $app:www-data $calibre_dir
-fi
-
-#Check if metadata.db file exists. If not create it (empty library)
-if [ ! -e "$calibre_dir"/metadata.db ]; then
-	cp -a ../conf/metadata.db.empty $calibre_dir/metadata.db
-	chown $app:www-data $calibre_dir/*
-fi
-
-# Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-    ynh_legacy_permissions_delete_all
-
-    ynh_app_setting_delete --app=$app --key=is_public
-fi
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
-
-# Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
-
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]
-then
+if [ "$upgrade_type" == "UPGRADE_APP" ]; then
     ynh_script_progression --message="Upgrading source files..." --weight=1
 
     # Download, check integrity, uncompress and patch the source from app.src
-    ynh_setup_source --dest_dir="$final_path"
+    ynh_setup_source --dest_dir="$install_dir"
 fi
 
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
-
-# Create a dedicated PHP-FPM config
-ynh_add_fpm_config
-
-#=================================================
-# NGINX CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
-
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # RESTORE THE DATA DIRECTORY
 #=================================================
 ynh_script_progression --message="Creating a calibre directory..." --weight=1
 
-#build multimedia directory
+# build multimedia directory
 ynh_multimedia_build_main_dir
-ynh_multimedia_addaccess $app
+ynh_multimedia_addaccess "$app"
 
 calibre_dir="/home/yunohost.multimedia/share/eBook"
 ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
+
+# Check if metadata.db file exists. If not create it (empty library)
+if [ ! -e "$calibre_dir/metadata.db" ]; then
+    cp -a ../conf/metadata.db.empty "$calibre_dir/metadata.db"
+fi
 
 chmod 750 "$calibre_dir"
 chmod -R o-rwx "$calibre_dir"
@@ -139,17 +58,30 @@ chown -R $app:www-data "$calibre_dir"
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-ynh_add_config --template="../conf/config_local.php" --destination="$final_path/config_local.php"
+timezone="$(cat /etc/timezone)"
 
-chmod 400 "$final_path/config_local.php"
-chown $app "$final_path/config_local.php"
+ynh_add_config --template="../conf/config_local.php" --destination="$install_dir/config_local.php"
+
+chmod 400 "$install_dir/config_local.php"
+chown $app "$install_dir/config_local.php"
+
+#=================================================
+# REAPPLY SYSTEM CONFIGURATIONS
+#=================================================
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+
+# Create a dedicated NGINX config
+ynh_add_nginx_config
+
+# Create a dedicated PHP-FPM config
+ynh_add_fpm_config
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
+ynh_script_progression --message="Reloading $app's service..." --weight=1
 
-ynh_systemd_action --service_name=nginx --action=reload
+ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
 
 #=================================================
 # END OF SCRIPT
