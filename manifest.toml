@@ -18,7 +18,7 @@ website = "https://blog.slucas.fr/projects/calibre-opds-php-server/"
 demo = "http://cops-demo.slucas.fr/index.php"
 
 [integration]
-yunohost = ">= 11.0.9"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = "not_relevant"
