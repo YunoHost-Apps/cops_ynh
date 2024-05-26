@@ -24,7 +24,7 @@ Creates an OPDS and HTML server based on a Calibre folder stored in NextCloud
 **Demoa:** <http://cops-demo.slucas.fr/index.php>
 ## :red_circle: Ezaugarri zalantzagarriak
 
-- **Mantendu gabeko paketea**: Pakete honek ez du mantenduko duenik, boluntario baten beharra dauka.
+- **Mantendu gabeko paketea**: YunoHost pakete honek ez du mantenduko duenik, bere gain hartuko duen norbaiten beharra dauka. Honek esan nahi duena da mantentze-lanak minimoak izango direla eta aplikazioa erabiltzen ez duten boluntarioek egingo dituztela lanok; denborak aurrera egin ahala fidagarri izateari utziko dio. [Aplikazioak nola paketatu](https://yunohost.org/packaging_apps_intro) ikas dezakezu, zure gain hartu nahi baduzu.
 
 ## Dokumentazioa eta baliabideak
 
