@@ -22,7 +22,7 @@ Creates an OPDS and HTML server based on a Calibre folder stored in NextCloud
 **Versión actual:** 1.1.3~ynh2
 
 **Demo:** <http://cops-demo.slucas.fr/index.php>
-## :red_circle: funcionalidades no deseadas
+## :red_circle: Características no deseables
 
 - **Package not maintained**: This YunoHost package is not actively maintained and needs adoption. This means that minimal maintenance is made by volunteers who don't use the app, so you should expect the app to lose reliability over time. You can [learn how to package](https://yunohost.org/packaging_apps_intro) if you'd like to adopt it.
 
