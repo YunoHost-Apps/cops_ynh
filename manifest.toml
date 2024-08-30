@@ -18,7 +18,8 @@ website = "https://blog.slucas.fr/projects/calibre-opds-php-server/"
 demo = "http://cops-demo.slucas.fr/index.php"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.18"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 ldap = "not_relevant"
@@ -56,6 +57,7 @@ ram.runtime = "50M"
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
