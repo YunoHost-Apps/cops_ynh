@@ -58,7 +58,7 @@ chown -R $app:www-data "$calibre_dir"
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-timezone="$(cat /etc/timezone)"
+timezone="$(timedatectl show --value --property=Timezone)"
 
 ynh_add_config --template="../conf/config_local.php" --destination="$install_dir/config_local.php"
 
