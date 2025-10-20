@@ -7,7 +7,7 @@ name = "COPS"
 description.en = "Calibre OPDS (and HTML) PHP Server"
 description.fr = "Calibre OPDS (et HTML) PHP Serveur"
 
-version = "1.1.3~ynh2"
+version = "1.1.3~ynh3"
 
 maintainers = ["polytan02"]
 
@@ -18,7 +18,8 @@ website = "https://blog.slucas.fr/projects/calibre-opds-php-server/"
 demo = "http://cops-demo.slucas.fr/index.php"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.18"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 ldap = "not_relevant"
@@ -56,17 +57,18 @@ ram.runtime = "50M"
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
 
     [resources.apt]
     packages = [
-        "php7.4-xml",
-        "php7.4-mbstring",
-        "php7.4-zip",
-        "php7.4-gd",
-        "php7.4-sqlite3",
-        "php7.4-json",
-        "php7.4-intl",
+        "php8.4-xml",
+        "php8.4-mbstring",
+        "php8.4-zip",
+        "php8.4-gd",
+        "php8.4-sqlite3",
+        "php8.4-json",
+        "php8.4-intl",
     ]

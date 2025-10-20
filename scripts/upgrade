@@ -1,48 +1,33 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+ynh_script_progression "Ensuring downward compatibility..."
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-if [ "$upgrade_type" == "UPGRADE_APP" ]; then
-    ynh_script_progression --message="Upgrading source files..." --weight=1
+ynh_script_progression "Upgrading source files..."
 
-    # Download, check integrity, uncompress and patch the source from app.src
-    ynh_setup_source --dest_dir="$install_dir"
-fi
-
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source --dest_dir="$install_dir"
 
 #=================================================
 # RESTORE THE DATA DIRECTORY
 #=================================================
-ynh_script_progression --message="Creating a calibre directory..." --weight=1
+ynh_script_progression "Creating a calibre directory..."
 
 # build multimedia directory
 ynh_multimedia_build_main_dir
 ynh_multimedia_addaccess "$app"
 
 calibre_dir="/home/yunohost.multimedia/share/eBook"
-ynh_app_setting_set --app=$app --key=calibre_dir --value=$calibre_dir
+ynh_app_setting_set --key=calibre_dir --value=$calibre_dir
 
 # Check if metadata.db file exists. If not create it (empty library)
 if [ ! -e "$calibre_dir/metadata.db" ]; then
@@ -56,35 +41,32 @@ chown -R $app:www-data "$calibre_dir"
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..." --weight=1
+ynh_script_progression "Updating configuration..."
 
 timezone="$(timedatectl show --value --property=Timezone)"
 
-ynh_add_config --template="../conf/config_local.php" --destination="$install_dir/config_local.php"
-
-chmod 400 "$install_dir/config_local.php"
-chown $app "$install_dir/config_local.php"
+ynh_config_add --template="config_local.php" --destination="$install_dir/config_local.php"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+ynh_script_progression "Upgrading system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_config_add_phpfpm
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading $app's service..." --weight=1
+ynh_script_progression "Reloading $app's service..."
 
-ynh_systemd_action --service_name=php$phpversion-fpm --action=reload
+ynh_systemctl --service=php$php_version-fpm --action=reload
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
