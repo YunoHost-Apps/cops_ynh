@@ -7,18 +7,17 @@ name = "COPS"
 description.en = "Calibre OPDS (and HTML) PHP Server"
 description.fr = "Calibre OPDS (et HTML) PHP Serveur"
 
-version = "1.1.3~ynh2"
+version = "3.7.8~ynh1"
 
 maintainers = ["polytan02"]
 
 [upstream]
 license = "GPL-2.0"
-code = "https://github.com/seblucas/cops"
-website = "https://blog.slucas.fr/projects/calibre-opds-php-server/"
-demo = "http://cops-demo.slucas.fr/index.php"
+code = "https://github.com/mikespub-org/seblucas-cops"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.18"
+helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 ldap = "not_relevant"
@@ -48,25 +47,26 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/seblucas/cops/releases/download/1.1.3/cops-1.1.3.zip"
-    sha256 = "68c9efb340ab30989cd89a19a173c45872d33ed85dd02674f8af08b7748cbc77"
+    url = "https://github.com/mikespub-org/seblucas-cops/releases/download/3.7.8/cops-3.7.8-php82.zip"
+    sha256 = "31a064d0b592ff27e5b2a1d9d05663125867b4a27e5257fcccfc0a454daa4904"
     in_subdir = false
     autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
 
     [resources.install_dir]
+    group = "www-data:r-x"
 
     [resources.permissions]
     main.url = "/"
 
     [resources.apt]
     packages = [
-        "php7.4-xml",
-        "php7.4-mbstring",
-        "php7.4-zip",
-        "php7.4-gd",
-        "php7.4-sqlite3",
-        "php7.4-json",
-        "php7.4-intl",
+        "php8.2-xml",
+        "php8.2-mbstring",
+        "php8.2-zip",
+        "php8.2-gd",
+        "php8.2-sqlite3",
+        "php8.2-json",
+        "php8.2-intl",
     ]
