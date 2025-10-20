@@ -12,7 +12,7 @@ Calibre OPDS (and HTML) PHP Server
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://blog.slucas.fr/projects/calibre-opds-php-server/)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](http://cops-demo.slucas.fr/index.php)
-[![Version: 1.1.3~ynh2](https://img.shields.io/badge/Version-1.1.3~ynh2-rgba(0,150,0,1)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/cops/)
+[![Version: 1.1.3~ynh3](https://img.shields.io/badge/Version-1.1.3~ynh3-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/cops/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/cops"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
