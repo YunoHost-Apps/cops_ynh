@@ -16,7 +16,7 @@ license = "GPL-2.0"
 code = "https://github.com/mikespub-org/seblucas-cops"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
