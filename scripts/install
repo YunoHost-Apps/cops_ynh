@@ -30,6 +30,7 @@ fi
 chmod 750 "$calibre_dir"
 chmod -R o-rwx "$calibre_dir"
 chown -R $app:www-data "$calibre_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # ADD A CONFIGURATION
