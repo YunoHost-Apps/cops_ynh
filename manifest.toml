@@ -7,7 +7,7 @@ name = "COPS"
 description.en = "Calibre OPDS (and HTML) PHP Server"
 description.fr = "Calibre OPDS (et HTML) PHP Serveur"
 
-version = "3.7.8~ynh1"
+version = "3.7.8~ynh2"
 
 maintainers = ["polytan02"]
 
