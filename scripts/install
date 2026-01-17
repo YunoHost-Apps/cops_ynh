@@ -38,7 +38,7 @@ ynh_script_progression "Adding $app's configuration..."
 
 timezone="$(timedatectl show --value --property=Timezone)"
 
-ynh_config_add --template="config_local.php" --destination="$install_dir/config_local.php"
+ynh_config_add --template="config_local.php" --destination="$install_dir/config/local.php"
 
 #=================================================
 # SYSTEM CONFIGURATION
