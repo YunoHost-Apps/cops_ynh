@@ -7,7 +7,7 @@ name = "COPS"
 description.en = "Calibre OPDS (and HTML) PHP Server"
 description.fr = "Calibre OPDS (et HTML) PHP Serveur"
 
-version = "3.7.8~ynh1"
+version = "3.8.2~ynh1"
 
 maintainers = ["polytan02"]
 
@@ -16,7 +16,7 @@ license = "GPL-2.0"
 code = "https://github.com/mikespub-org/seblucas-cops"
 
 [integration]
-yunohost = ">= 11.2.18"
+yunohost = ">= 12.1.38"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
@@ -49,8 +49,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/mikespub-org/seblucas-cops/releases/download/3.7.8/cops-3.7.8-php82.zip"
-    sha256 = "31a064d0b592ff27e5b2a1d9d05663125867b4a27e5257fcccfc0a454daa4904"
+    url = "https://github.com/mikespub-org/seblucas-cops/releases/download/3.8.2/cops-3.8.2-php82.zip"
+    sha256 = "cb4e871787ddd176f85c8738883d3c59794e03acda9f4b67438072f3e5761f38"
     in_subdir = false
     autoupdate.strategy = "latest_github_release"
 
